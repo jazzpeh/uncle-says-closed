@@ -15,10 +15,10 @@ test('home lists the 3 centres closed on 2026-10-20', async ({ page }) => {
   ])
   await expect(page.getByRole('link', { name: /Bukit Timah Market/ }).locator('.row__km')).toHaveText('reopens Tue 1 Jan 2030')
   await expect(page.getByRole('link', { name: /Golden Mile Food Centre/ }).locator('.row__km')).toHaveText('closes Mon 26 Oct')
-  await expect(page.locator('footer')).toContainText('Data as of')
-  await expect(page.locator('footer')).toContainText(
-    'from data.gov.sg, which is made available under the terms of the Singapore Open Data Licence version 1.0.',
-  )
+  await expect(page.locator('footer p')).toHaveText([
+    'Data as of 20 Oct 2026, 8:00 am (Singapore time).',
+    'Contains information from Dates of Hawker Centres Closure accessed on Tue 20 Oct 2026 from data.gov.sg, which is made available under the terms of the Singapore Open Data Licence version 1.0.',
+  ])
   await expect(page.getByRole('link', { name: 'Singapore Open Data Licence version 1.0' })).toHaveAttribute(
     'href',
     'https://data.gov.sg/open-data-licence',

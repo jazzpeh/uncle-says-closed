@@ -49,11 +49,11 @@ async function downloadCsv(): Promise<string> {
   return fetchText(url, { 'User-Agent': 'uncle-says-closed' })
 }
 
-const { values } = parseArgs({ options: { fixture: { type: 'string' } } })
+const { values } = parseArgs({ options: { fixture: { type: 'string' }, 'fetched-at': { type: 'string' } } })
 const csv = values.fixture ? await readFile(values.fixture, 'utf8') : await downloadCsv()
 const centres = parseClosuresCsv(csv)
 
-const snapshot: Snapshot = { fetchedAt: new Date().toISOString(), centres }
+const snapshot: Snapshot = { fetchedAt: new Date(values['fetched-at'] ?? Date.now()).toISOString(), centres }
 await mkdir('public/data', { recursive: true })
 await writeFile(OUTPUT, JSON.stringify(snapshot))
 
