@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="Half-Shut mark"><clipPath id="bub3"><path d="M24 8 H76 Q92 8 92 24 V62 Q92 78 76 78 H42 L20 94 L24 78 Q8 78 8 62 V24 Q8 8 24 8 Z"/></clipPath>
+<g clip-path="url(#bub3)"><rect x="0" y="0" width="100" height="100" fill="#1F8A5B"/>
+<rect x="0" y="0" width="100" height="50" fill="#E23B2E"/>
+<path d="M0 22H100M0 33H100" stroke="#B8271C" stroke-width="4"/>
+<rect x="0" y="46" width="100" height="6" fill="#1E1B18"/></g>
+<rect x="43" y="50" width="14" height="6" rx="2" fill="#F6C343"/>
+</svg>

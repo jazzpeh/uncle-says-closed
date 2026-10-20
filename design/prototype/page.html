@@ -1,0 +1,776 @@
+<title>Uncle Says Closed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Bungee&family=Gochi+Hand&family=Ma+Shan+Zheng&family=Noto+Sans+Tamil:wght@600&display=swap">
+<style>
+:root{
+  --ink:#1E1B18; --ink-2:#5C5650; --line:rgba(30,27,24,.12); --scrim:rgba(30,27,24,.55);
+  --cream:#FFF4E0; --cream-2:#F6E5C4; --cream-3:#EDD8B0; --paper:#FFFFFF;
+  --chilli:#E23B2E; --chilli-aa:#D22A1D;
+  --pandan:#1F8A5B; --pandan-aa:#1C7E53; --pandan-press:#166543;
+  --kaya:#F6C343; --kaya-press:#E8B12A;
+  --slate-aa:#6A6F78; --teh:#B5713E; --peranakan:#2BA6A0;
+  --sakura:#F28FAD;
+  --ui:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --display:'Bungee',Impact,'Arial Black',sans-serif;
+  --brush:'Ma Shan Zheng','KaiTi','STKaiti','Songti SC',serif;
+  --hand:'Gochi Hand','Bradley Hand','Comic Sans MS',cursive;
+  --tamil:'Noto Sans Tamil','Tamil Sangam MN','Latha',sans-serif;
+  --col:440px;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 15px/1.45 var(--ui);overflow-x:hidden;-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--pandan);outline-offset:2px}
+a{color:var(--pandan-press)}
+.i{display:inline-block;flex:none;width:24px;height:24px;fill:currentColor;vertical-align:middle}
+.i20{width:20px;height:20px}.i16{width:16px;height:16px}
+.f-paper{fill:var(--paper)}.f-cream2{fill:var(--cream-2)}.f-cream3{fill:var(--cream-3)}
+
+/* page column */
+.app{max-width:var(--col);margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:12px 104px}
+.top{display:flex;align-items:center;gap:8px;min-height:44px}
+.lockup{display:block;height:38px;width:auto;max-width:62vw}
+.today{margin-left:auto;font:600 14px/1.3 var(--ui);color:var(--ink-2);white-space:nowrap}
+.ahead{display:flex;flex-direction:column;gap:10px}
+.abody{display:flex;flex-direction:column;gap:8px;padding-top:14px}
+.headline{margin:4px 0 0;font:700 20px/1.3 var(--ui);text-wrap:pretty}
+.cnt{display:inline;border:0;padding:0;background:none;font:inherit;color:inherit;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-skip-ink:none}
+.cnt-closed{text-decoration-color:var(--chilli-aa)}.cnt-soon{text-decoration-color:var(--kaya)}
+.sec{margin:10px 0 0;font:700 16px/1.3 var(--ui);display:flex;align-items:center;gap:6px}
+.sec:first-child{margin-top:0}
+.sec .i{color:var(--peranakan)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;font:700 16px/1.3 var(--ui);white-space:nowrap}
+.btn-primary{width:100%;height:52px;padding:0 16px;background:var(--pandan-aa);color:var(--paper)}
+.btn-primary:active{background:var(--pandan-press)}
+.btn-primary[disabled]{opacity:.8;cursor:progress}
+.btn-soft{height:44px;padding:0 16px;background:var(--cream-2);color:var(--ink);font-size:14px}
+.btn-soft:active{background:var(--cream-3)}
+.btn-text{height:44px;padding:0 8px;background:none;color:var(--pandan-press);font-size:14px}
+.fab{position:fixed;z-index:900;right:max(calc(16px + env(safe-area-inset-right, 0px)), calc((100vw - var(--col)) / 2 + 16px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));height:56px;min-width:56px;border-radius:999px;padding:0 18px 0 14px;background:var(--kaya);color:var(--ink);font-size:16px}
+.fab.round{padding:0;width:56px}
+.fab.round .lbl{display:none}
+.fab:active{background:var(--kaya-press)}
+.see-all{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0;border:0;background:none;font:700 16px/1.3 var(--ui);color:var(--pandan-press);align-self:flex-start}
+.nearon{display:flex;align-items:center;gap:8px;min-height:52px;padding:4px 4px 4px 12px;border-radius:12px;background:var(--paper);font:600 14px/1.4 var(--ui)}
+.nearon > .i{color:var(--pandan-aa)}
+.nearon span{flex:1;min-width:0}
+.kl{display:inline-block;position:relative;width:16px;height:16px;border-radius:0 0 5px 5px;background:var(--paper);overflow:hidden}
+.kl::after{content:"";position:absolute;inset:0;background:var(--teh);transform-origin:bottom;animation:fill 1.1s steps(5) infinite}
+@keyframes fill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* search */
+.search{position:relative;display:flex;align-items:center;min-width:0}
+.search > .i{position:absolute;left:14px;color:var(--ink-2);pointer-events:none}
+.search input{width:100%;height:52px;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:0 48px 0 44px;font:400 16px/1.3 var(--ui);-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--ink-2)}
+.search input::-webkit-search-cancel-button{display:none}
+.search input:focus{outline:3px solid var(--pandan);outline-offset:0;border-color:transparent}
+.search .clr{position:absolute;right:6px;width:40px;height:40px;border:0;border-radius:999px;background:none;display:grid;place-items:center;color:var(--ink-2)}
+.search .clr span{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:var(--cream-2)}
+.search .clr .i{width:16px;height:16px}
+.search:not(.filled) .clr{display:none}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:60;display:flex;flex-direction:column;gap:8px;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+.sugg[hidden]{display:none}
+.sugg b{font:600 13px/1.3 var(--ui);color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;height:36px;padding:0 14px;border:0;border-radius:999px;background:var(--cream-2);font:600 14px/1 var(--ui);white-space:nowrap}
+
+/* status pill */
+.pill{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px 0 6px;border-radius:999px;font:700 12px/1 var(--ui);white-space:nowrap;color:var(--paper)}
+.pill .i{width:16px;height:16px}
+.pill-closed{background:var(--chilli-aa)}.pill-soon{background:var(--kaya);color:var(--ink)}
+.pill-unknown{background:var(--slate-aa)}.pill-open{background:var(--pandan-aa)}
+
+/* placards: English largest, then Malay, Chinese, Tamil */
+.placard{display:block;text-align:center;border-radius:12px;color:var(--paper);background:var(--chilli-aa);line-height:1.15}
+.placard .en{display:block;font-family:var(--display);font-weight:400}
+.placard .ms{font:700 1em/1.3 var(--ui)}
+.placard .zh{font:400 1.1em/1.2 var(--brush)}
+.placard .ta{font:600 .95em/1.4 var(--tamil)}
+.placard .sub{display:block;font:700 14px/1.3 var(--ui)}
+.pl-soon{background:var(--kaya);color:var(--ink)}
+.pl-unknown{background:var(--slate-aa)}
+.pl-open{background:var(--pandan-aa)}
+.placard.sm{padding:5px 6px;transform:rotate(-1deg)}
+.placard.sm .en{font-size:12px;white-space:nowrap;overflow:hidden}
+.placard.sm .langs{display:flex;flex-wrap:nowrap;justify-content:center;align-items:baseline;gap:0 .5em;margin-top:1px;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden}
+.placard.sm .ms{text-transform:uppercase}
+.placard.lg{padding:16px 12px 14px;transform:rotate(-1.5deg)}
+.placard.lg .en{font-size:28px;text-wrap:balance}
+.placard.lg .langs{display:flex;flex-direction:column;gap:2px;margin-top:8px;font-size:16px}
+.placard.lg .ms{text-transform:uppercase}
+.placard.lg .sub{margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.35)}
+.pl-soon.lg .sub{border-top-color:rgba(30,27,24,.2)}
+
+/* photo tiles: each centre's own NEA photo as a taped print. Shut centres go black and white with the placard stamped across. */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px;padding:10px 4px 18px}
+.tiles .tile:only-child{grid-column:1/-1}
+.tile{position:relative;padding:7px 7px 0;border-radius:3px;background:var(--paper);transform:rotate(-1.6deg)}
+.tile:nth-child(even){transform:translateY(16px) rotate(1.4deg)}
+.tile::before,.hero-pol::before{content:"";position:absolute;z-index:2;top:-9px;left:50%;width:56px;height:18px;margin-left:-28px;background:var(--kaya);opacity:.85;transform:rotate(-4deg)}
+.tile:nth-child(3n+2)::before{background:var(--peranakan)}
+.tile:nth-child(3n)::before{background:var(--sakura)}
+.tile-hit{display:block;width:100%;border:0;padding:0;background:none;text-align:left;color:var(--ink)}
+.ph{position:relative;display:block;overflow:hidden;aspect-ratio:4/3;border-radius:2px;background:var(--cream-3)}
+.ph img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.s-closed .ph img,.s-unknown .ph img{filter:grayscale(1) brightness(.85)}
+.s-soon .ph img{filter:saturate(.5)}
+.tile-top{display:flex;flex-direction:column;gap:4px;padding:8px 2px 10px}
+.tile-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;font:800 15px/1.25 var(--ui);text-wrap:balance}
+.tile-st{display:flex;align-items:center;gap:6px;width:100%}
+.tile-st .km{font:700 12px/1.3 var(--ui);color:var(--ink-2)}
+.tile-st .pill + .km{margin-left:auto}
+.tile-st .tc{display:grid;place-items:center;width:24px;height:24px;margin-left:auto;border-radius:999px;background:var(--peranakan);color:var(--ink)}
+.tile-st .tc .i{width:16px;height:16px}
+.s-closed .tile-st .pill,.s-soon .tile-st .pill,.s-unknown .tile-st .pill{display:none}
+.shutter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 4px;transform:translateY(var(--y,0))}
+.shutter .placard.sm{width:100%;min-width:0;transform:rotate(-8deg);box-shadow:0 0 0 3px var(--paper)}
+.shutter .placard.sm .langs{flex-wrap:wrap;white-space:normal}
+.s-open .shutter{display:none}
+.tile.rattle .shutter{animation:rattle .55s}
+@keyframes rattle{0%,100%{transform:translateY(var(--y,0))}35%,60%{transform:translateY(calc(var(--y,0%) - 8%))}}
+.tile.slam .shutter{animation:slam .45s cubic-bezier(.6,0,.9,.4)}
+@keyframes slam{0%{transform:translateY(-100%)}85%,100%{transform:translateY(0)}}
+.tile.reveal .shutter{animation:reveal 1s ease-in-out}
+@keyframes reveal{0%{transform:translateY(0)}45%,70%{transform:translateY(-100%)}100%{transform:translateY(var(--y,0))}}
+.tile.flash{animation:flash 1.2s 2}
+@keyframes flash{50%{box-shadow:0 0 0 5px var(--kaya)}}
+
+/* taped note */
+.note{position:relative;margin:8px 4px 0;padding:20px 16px 12px;background:var(--paper);border-radius:4px;transform:rotate(1deg);font:400 20px/1.35 var(--hand)}
+.note::before{content:"";position:absolute;top:-10px;left:50%;width:72px;height:20px;margin-left:-36px;background:var(--kaya);opacity:.9;transform:rotate(-3deg)}
+.note p{margin:0}
+.note .sig{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px;font-size:18px}
+.ava{display:block;flex:none;width:32px;height:32px}
+
+/* quiet facts */
+.quiet{border-radius:12px;background:var(--cream-2);font:600 14px/1.4 var(--ui)}
+div.quiet,.quiet summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px}
+.quiet .i{color:var(--ink-2)}
+.quiet .qt{flex:1;min-width:0}
+.quiet summary{cursor:pointer;list-style:none}
+.quiet summary::-webkit-details-marker{display:none}
+.quiet .more{flex:none;font-weight:700;color:var(--pandan-press)}
+.quiet .more::after{content:"";display:inline-block;width:7px;height:7px;margin:0 2px 2px 8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.quiet[open] .more::after{transform:rotate(-135deg);margin-bottom:-2px}
+.quiet p{margin:0;padding:0 12px 12px 40px;font-weight:400}
+
+/* go-here sign */
+.go-sign{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;border:0;border-radius:16px;padding:12px 12px 12px 16px;background:var(--kaya);color:var(--ink);text-align:left}
+.go-sign:active{background:var(--kaya-press)}
+.go-sign .tx{flex:1;min-width:0}
+.go-sign .gl{display:block;font:700 12px/1.3 var(--ui)}
+.go-sign .nm{display:block;font:800 16px/1.3 var(--ui);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go-sign .mt{display:block;font:600 14px/1.3 var(--ui)}
+.go-sign .arr{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:999px;background:var(--ink);color:var(--kaya)}
+
+/* bottom sheet */
+.sheet{position:fixed;inset:0;z-index:2500;display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none}
+.scrim{position:absolute;inset:0;background:var(--scrim)}
+.panel{position:relative;width:100%;max-width:var(--col);max-height:90vh;max-height:90dvh;overflow:auto;border-radius:16px 16px 0 0;background:var(--cream);padding:8px 16px calc(24px + env(safe-area-inset-bottom, 0px));display:flex;flex-direction:column;gap:16px;animation:up .3s cubic-bezier(.2,.9,.3,1)}
+@keyframes up{from{transform:translateY(100%)}}
+.panel > div:empty:not(.handle){display:none}
+.panel:focus{outline:none}
+.handle{width:40px;height:4px;margin:0 auto;border-radius:999px;background:rgba(30,27,24,.2)}
+.sh-head{display:flex;align-items:flex-start;gap:12px}
+.sh-head .tx{flex:1;min-width:0;padding-top:4px}
+.sh-head h2{margin:0;font:800 20px/1.3 var(--ui);text-wrap:balance}
+.sh-head p{margin:4px 0 0;font:400 14px/1.4 var(--ui);color:var(--ink-2)}
+.sh-btns{display:flex;gap:8px;flex:none}
+.xbtn{flex:none;width:44px;height:44px;border:0;border-radius:999px;background:var(--cream-2);color:var(--ink);display:grid;place-items:center}
+.xbtn:active{background:var(--cream-3)}
+.xbtn[aria-pressed=true]{background:var(--pandan-aa);color:var(--paper)}
+.copybox{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:12px;background:var(--paper);font:700 14px/1.3 var(--ui)}
+.copybox[hidden]{display:none}
+.copybox textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:8px;padding:8px;font:400 14px/1.4 var(--ui);resize:none;background:var(--cream)}
+.hero-pol{position:relative;margin:8px 4px 0;padding:8px 8px 14px;border-radius:3px;background:var(--paper);transform:rotate(-1deg)}
+.hero-pol .ph{aspect-ratio:16/10}
+.hero-pol .placard{position:relative;margin:-48px 6px 0}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.acts .btn{width:100%}
+
+/* dialogs: spinner + location picker */
+.modal{position:fixed;inset:0;z-index:3500;background:var(--scrim);display:grid;place-items:center;padding:16px calc(16px + env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));overflow:auto}
+.modal[hidden]{display:none}
+.card{width:100%;max-width:360px;background:var(--cream);border-radius:16px;padding:20px 16px 16px;text-align:center;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0;font:800 20px/1.3 var(--ui);text-wrap:balance}
+.card .lead{margin:-4px 0 0;font:600 15px/1.4 var(--ui);color:var(--ink-2)}
+.susanwrap{position:relative;width:240px;height:240px;margin:4px auto 0}
+.susanwrap::before{content:"";position:absolute;left:50%;top:-8px;margin-left:-11px;border:11px solid transparent;border-top:16px solid var(--ink);border-bottom:0;z-index:2}
+.susan{position:absolute;inset:0;display:block;width:240px;height:240px;transform-origin:50% 50%}
+.dish{margin:0;min-height:34px;font:400 24px/1.4 var(--display);color:var(--chilli-aa)}
+.quip{margin:-6px 0 0;font:600 16px/1.4 var(--ui);color:var(--ink-2);min-height:22px}
+.spinact{display:flex;flex-direction:column;gap:8px}
+.spinact[hidden]{display:none}
+.pk-list{display:flex;flex-direction:column;gap:8px}
+.pk{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;border:0;border-radius:12px;padding:8px 14px;background:var(--paper);font:700 16px/1.3 var(--ui);text-align:left}
+.pk .i{color:var(--pandan-aa)}
+.pk.far .i{color:var(--teh)}
+.pk:active{background:var(--cream-2)}
+
+/* state illustrations */
+.spot{display:block;width:160px;height:160px}
+.spot-fig{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0;text-align:center}
+.spot-fig figcaption{max-width:280px;font:700 16px/1.4 var(--ui);text-wrap:balance}
+.spot-fig p{margin:0;font:400 14px/1.4 var(--ui);color:var(--ink-2)}
+.statecard{display:flex;align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:16px;background:var(--paper)}
+.statecard .spot{width:88px;height:88px;flex:none}
+.statecard div{font:700 16px/1.4 var(--ui);text-wrap:balance}
+.statecard p{margin:4px 0 0;font:400 14px/1.4 var(--ui);color:var(--ink-2)}
+.stream{stroke-dasharray:8 7;animation:pour .6s linear infinite}
+@keyframes pour{to{stroke-dashoffset:-15}}
+
+/* wall */
+.wallhead{display:flex;align-items:center;gap:12px}
+.wallhead h2{margin:0;font:800 20px/1.3 var(--ui)}
+.showing{display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 4px 0 14px;border:0;border-radius:999px;background:var(--ink);color:var(--cream);font:600 14px/1 var(--ui);align-self:flex-start}
+.showing .x{display:grid;place-items:center;width:28px;height:28px}
+.showing .i{width:16px;height:16px}
+
+/* demo bar + attribution */
+.demo{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px;font:400 13px/1.45 var(--ui);color:var(--ink-2)}
+.demo p{margin:0}
+.demo-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dates{display:flex;background:var(--cream-2);border-radius:10px;padding:3px}
+.dates button{border:0;background:transparent;height:38px;padding:0 12px;border-radius:8px;font:600 13px/1 var(--ui);color:var(--ink)}
+.dates button[aria-pressed=true]{background:var(--ink);color:var(--cream);font-weight:700}
+.demo .btn-soft{height:44px;font-size:13px}
+.attr{font-size:12px}
+
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);z-index:4000;background:var(--ink);color:var(--cream);padding:12px 16px;border-radius:12px;font:700 14px/1.4 var(--ui);width:max-content;max-width:calc(100vw - 32px)}
+.toast[hidden]{display:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+
+<div class="app">
+  <div id="ahome">
+    <div class="ahead" id="ahead"></div>
+    <div class="abody" id="abody"></div>
+  </div>
+  <div id="awall" hidden>
+    <div class="wallhead" id="wallhead"></div>
+    <div class="abody"><div id="wallchip"></div><div class="tiles" id="wall"></div></div>
+  </div>
+
+  <footer class="demo" aria-label="Demo controls">
+    <p>Prototype · data as of 20 Oct 2026 · tap 7 Dec to see a busy day</p>
+    <div class="demo-row">
+      <div class="dates" role="group" aria-label="Pretend today is">
+        <button data-d="2026-10-20" aria-pressed="true">20 Oct</button>
+        <button data-d="2026-12-07" aria-pressed="false">7 Dec</button>
+      </div>
+      <button class="btn btn-soft" id="reset">Reset demo</button>
+    </div>
+    <p class="attr">Contains information from Dates of Hawker Centres Closure accessed from data.gov.sg, made available under the <a href="https://data.gov.sg/open-data-licence" target="_blank" rel="noopener">Singapore Open Data Licence version 1.0</a>. Centre photos are from the same NEA dataset.</p>
+  </footer>
+</div>
+<div id="afab"></div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="scrim" data-close></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="sh-name" tabindex="-1">
+    <div class="handle"></div>
+    <div class="sh-head"><div class="tx"><h2 id="sh-name"></h2><p id="sh-addr"></p></div><div class="sh-btns"><button class="xbtn" id="sh-chope" aria-pressed="false"></button><button class="xbtn" id="sh-share" aria-label="Tell my kakis"></button><button class="xbtn" data-close aria-label="Close" id="sh-x"></button></div></div>
+    <label class="copybox" id="sh-copy" hidden>Copy this and send to your kakis<textarea readonly rows="3"></textarea></label>
+    <div id="sh-hero"></div>
+    <div id="sh-note"></div>
+    <div id="sh-alt"></div>
+    <div id="sh-rem"></div>
+  </div>
+</div>
+
+<div class="modal" id="spin" hidden role="dialog" aria-modal="true" aria-labelledby="spinh">
+  <div class="card">
+    <h3 id="spinh">Eat where ah?</h3>
+    <div class="susanwrap"><svg class="susan" id="susan" viewBox="0 0 240 240" aria-hidden="true"></svg></div>
+    <p class="dish" id="dish" aria-live="polite"></p>
+    <p class="quip" id="quip"></p>
+    <div class="spinact" id="spinact" hidden></div>
+  </div>
+</div>
+
+<div class="modal" id="picker" hidden role="dialog" aria-modal="true" aria-labelledby="pk-h">
+  <div class="card">
+    <h3 id="pk-h">Uncle cannot see your location here</h3>
+    <p class="lead">Pretend you're at</p>
+    <div class="pk-list" id="pk-list"></div>
+    <button class="btn btn-text" data-pk-close>Cancel</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+/*@DATA@*/
+</script>
+<script>
+const UI = (() => {
+  let uid = 0;
+  const INK = '#1E1B18', WHITE = '#FFFFFF', KAYA = '#F6C343', TEH = '#B5713E', TEAL = '#2BA6A0', GROUND = '#EDD8B0';
+  const M = 'fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"';
+  const LINE = 'fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"';
+  const cut = (shape, holes) => { const id = 'm' + (++uid); return `<mask id="${id}"><rect width="24" height="24" fill="#fff"/>${holes}</mask><g mask="url(#${id})">${shape}</g>`; };
+  const disc = '<circle cx="12" cy="12" r="10"/>';
+  const TISSUE = 'M9.4 13.5C8.3 10.6 8.2 7.4 9.3 4.4c1 .9 1.9 1.3 2.8 1.2.9-.1 1.8-.8 2.6-1.9 1.2 3.2 1.1 6.6-.1 9.8z';
+  const ICONS = {
+    pin: () => '<path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/>',
+    plane: () => '<path d="M21.5 3.2c-.9-.9-2.3-.8-3.2.1l-3.6 3.6-9.4-2.7-2 2 7.7 4.4-3.4 3.4-2.9-.5-1.5 1.5 3.6 1.9 1.9 3.6 1.5-1.5-.5-2.9 3.4-3.4 4.4 7.7 2-2-2.7-9.4 3.6-3.6c.9-.9 1-2.3.1-3.2z"/>',
+    search: () => `<circle cx="10.5" cy="10.5" r="6.25" ${LINE}/><path d="M15.2 15.2L20 20" ${LINE}/>`,
+    close: () => `<path d="M6.5 6.5l11 11M17.5 6.5l-11 11" ${LINE}/>`,
+    arrow: () => `<path d="M4.5 12h14M13 6.5l5.5 5.5-5.5 5.5" ${LINE}/>`,
+    back: () => `<path d="M19.5 12h-14M11 6.5L5.5 12l5.5 5.5" ${LINE}/>`,
+    share: () => `<path d="M12 14.5V3.5M7.8 7.5L12 3.3l4.2 4.2" ${LINE}/><path d="M8.5 10.5H7a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2h-1.5" ${LINE}/>`,
+    info: () => cut(disc, `<path d="M12 11v5.5" ${M}/><circle cx="12" cy="7.6" r="1.5" fill="#000"/>`),
+    open: () => cut(disc, `<path d="M7.8 12.3l2.8 2.8 5.6-5.8" ${M}/>`),
+    soon: () => cut(disc, `<path d="M12 7v5l3.2 2" ${M}/>`),
+    unknown: () => cut(disc, `<path d="M9.6 9.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.4v.4" ${M}/><circle cx="12" cy="17" r="1.45" fill="#000"/>`),
+    closed: () => cut('<rect x="2.5" y="3" width="19" height="18" rx="3"/>', `<path d="M6.5 8.5h11M6.5 12.5h11M6.5 16.5h11" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>`),
+    susan: () => cut('<ellipse cx="12" cy="15" rx="10" ry="6"/>', '<ellipse cx="7.6" cy="15" rx="2.4" ry="1.5" fill="#000"/><ellipse cx="16.4" cy="15" rx="2.4" ry="1.5" fill="#000"/><ellipse cx="12" cy="18" rx="2.4" ry="1.5" fill="#000"/><ellipse cx="12" cy="12.2" rx="2" ry="1.2" fill="#000"/>') + `<path d="M6 6.2C7.7 5 9.7 4.4 12 4.4s4.3.6 6 1.8" ${LINE}/><path d="M18.9 3.4l.2 3.5-3.4.6" ${LINE}/>`,
+    tissue: () => `<rect x="3" y="11" width="18" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="${TISSUE}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>`,
+    tissueOn: () => cut('<rect x="3" y="11" width="18" height="10" rx="3"/>', `<path d="${TISSUE}" fill="#000" stroke="#000" stroke-width="3" stroke-linejoin="round"/>`) + `<path d="${TISSUE}"/>`,
+  };
+  const icon = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]()}</svg>`;
+
+  const MON = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+  const DOW = 'Sun Mon Tue Wed Thu Fri Sat'.split(' ');
+  const fmt = ymd => { const [y, m, d] = ymd.split('-').map(Number); const t = new Date(Date.UTC(y, m - 1, d)); return `${DOW[t.getUTCDay()]} ${d} ${MON[m - 1]}${y !== 2026 ? ' ' + y : ''}`; };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const short = n => n.replace(/\s*\(.*?\)\s*/g, ' ').replace(/\s+(Market and |Market & |Market\/)?(Cooked )?(Food Centre|Hawker Centre)\s*$/i, '').trim() || n;
+  const KIND = { open: 'open', 'closing-soon': 'soon', closed: 'closed', unknown: 'unknown' };
+  const WORD = { open: 'Open', soon: 'Closing soon', closed: 'Closed', unknown: 'Not sure' };
+  const kind = c => KIND[c.status.kind];
+  const marketStalls = c => { const m = /(\d+)\s+market stalls/i.exec(c.description || ''); return m ? +m[1] : 0; };
+  const dist = d => d < 1 ? `${Math.max(50, Math.round(d * 20) * 50)} m` : `${d.toFixed(1)} km`;
+  const pill = k => `<span class="pill pill-${k}">${icon(k)}${WORD[k]}</span>`;
+
+  // Unverified translations. A native speaker must review every ms / zh / ta string before launch.
+  // `short` is the one-line tile version: the shortest natural word per language.
+  const PLACARD_TEXT = {
+    closed:  { en: 'Closed today', ms: 'Tutup hari ini', zh: '今日休息', ta: 'இன்று விடுமுறை', short: ['Tutup', '休息', 'விடுமுறை'] },
+    works:   { en: 'Renovation', ms: 'Ubah suai', zh: '装修', ta: 'புதுப்பிப்பு பணி', short: ['Ubah suai', '装修', 'பணி'] },
+    soon:    { en: 'Closing', ms: 'Akan tutup', zh: '即将休息', ta: 'விரைவில் மூடப்படும்', short: ['Akan tutup', '即将休息', 'விரைவில்'] },
+    unknown: { en: 'Call first', ms: 'Telefon dahulu', zh: '请先致电', ta: 'முதலில் அழைக்கவும்', short: ['Telefon', '致电', 'அழைக்கவும்'] },
+    open:    { en: 'Open today', ms: 'Buka hari ini', zh: '今日营业', ta: 'இன்று திறந்திருக்கும்', short: ['Buka', '营业', 'திறந்திருக்கும்'] },
+  };
+  function placardParts(c) {
+    const s = c.status, k = kind(c);
+    if (k === 'closed') return { k, t: PLACARD_TEXT[s.closure.kind === 'works' ? 'works' : 'closed'], sub: `Back ${fmt(s.reopensOn)}` };
+    if (k === 'soon') return { k, t: PLACARD_TEXT.soon, date: fmt(s.closure.start).replace(/^\w+ /, ''), sub: `Shut from ${fmt(s.closure.start)}` };
+    if (k === 'unknown') return { k, t: PLACARD_TEXT.unknown, sub: 'Not in the NEA list today' };
+    return { k, t: PLACARD_TEXT.open, sub: s.next ? `Next ${s.next.kind} ${fmt(s.next.start)}` : 'No closure listed' };
+  }
+  const en = p => esc(p.date ? `${p.t.en} ${p.date}` : p.t.en);
+  const placardFull = p => `<span class="placard lg pl-${p.k}"><span class="en">${en(p)}</span><span class="langs"><span class="ms" lang="ms">${p.t.ms}</span><span class="zh" lang="zh">${p.t.zh}</span><span class="ta" lang="ta">${p.t.ta}</span></span><span class="sub">${esc(p.sub)}</span></span>`;
+  const placardShort = p => { const [ms, zh, ta] = p.t.short; return `<span class="placard sm pl-${p.k}"><span class="en">${en(p)}</span><span class="langs"><span class="ms" lang="ms">${ms}</span><span class="zh" lang="zh">${zh}</span><span class="ta" lang="ta">${ta}</span></span></span>`; };
+
+  const stallsLine = c => c.foodStalls ? `${c.foodStalls} food stalls${marketStalls(c) ? ' · wet market' : ''}` : 'Stall count not listed';
+
+  function tile(c, { km, choped } = {}) {
+    const k = kind(c), n = short(c.name);
+    return `<div class="tile s-${k}" data-tile="${c.id}">
+<button class="tile-hit" data-id="${c.id}" aria-label="${esc(n)}, ${WORD[k]}${km !== undefined ? ', ' + dist(km) : ''}${choped ? ', choped' : ''}">
+<span class="ph"><img src="photos/${c.id}.jpg" alt="" loading="lazy" decoding="async"><span class="shutter">${k === 'open' ? '' : placardShort(placardParts(c))}</span></span>
+<span class="tile-top"><span class="tile-name">${esc(n)}</span><span class="tile-st">${pill(k)}${km !== undefined ? `<span class="km">${dist(km)}</span>` : ''}${choped ? `<span class="tc">${icon('tissueOn')}</span>` : ''}</span></span>
+</button></div>`;
+  }
+
+  const quiet = c => {
+    const r = c.remarks[0];
+    const head = `${icon('info', 'i20')}<span class="qt">${stallsLine(c)}${r && r.length <= 34 ? ' · ' + esc(r) : ''}</span>`;
+    if (!r || r.length <= 34) return `<div class="quiet">${head}</div>`;
+    return `<details class="quiet"><summary>${head}<span class="more">NEA notice</span></summary><p>${esc(r)}</p></details>`;
+  };
+  const goSign = ({ label = 'Go here instead', name, meta, attr = '' }) => `<button class="go-sign" ${attr}><span class="tx"><span class="gl">${esc(label)}</span><span class="nm">${esc(name)}</span><span class="mt">${esc(meta)}</span></span><span class="arr">${icon('arrow', 'i20')}</span></button>`;
+  const hero = c => { const p = placardParts(c); return `<div class="hero-pol s-${p.k}"><span class="ph"><img src="photos/${c.id}.jpg" alt="Photo of ${esc(c.name)}"></span>${placardFull(p)}</div>`; };
+
+  /* food stickers for the spinner, 48px grid, flat fills with ink outline */
+  const O = 'stroke="#1E1B18" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"';
+  const plate = (cy = 38) => `<ellipse cx="24" cy="${cy}" rx="21" ry="6" fill="#fff" ${O}/>`;
+  const bowl = band => `<path d="M4 22h40c0 10-9 18-20 18S4 32 4 22z" fill="#fff" ${O}/>${band ? `<path d="M8.5 31h31" stroke="${band}" stroke-width="3.5"/>` : ''}<rect x="16" y="39" width="16" height="4" rx="2" fill="${INK}"/>`;
+  const FOOD = {
+    chickenRice: ['Chicken rice', () => plate() + `<path d="M5 37a10.5 10.5 0 0 1 21 0z" fill="#fff" ${O}/>`
+      + [0, 1, 2].map(n => `<g transform="rotate(-14 ${31 + n * 3} ${24 + n * 5})"><rect x="${21 + n * 3}" y="${20 + n * 5}" width="21" height="8" rx="3" fill="#F8E2B5" ${O}/><path d="M${23 + n * 3} ${21.6 + n * 5}h17" stroke="#D9963F" stroke-width="2.6" stroke-linecap="round"/></g>`).join('')
+      + `<circle cx="9" cy="41" r="2.6" fill="#8CC56D" ${O}/>`],
+    laksa: ['Laksa', () => bowl(TEAL) + `<ellipse cx="24" cy="22" rx="20" ry="4.5" fill="#E8772E" ${O}/><path d="M10 22q2.5-2.5 5 0t5 0 5 0 5 0" fill="none" stroke="#F6C343" stroke-width="2.4" stroke-linecap="round"/>`
+      + `<path d="M29 19c-1-7 8-11 12-6s0 10-5 9" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><path d="M29 19c-1-7 8-11 12-6s0 10-5 9" fill="none" stroke="#F4846A" stroke-width="5" stroke-linecap="round"/><path d="M36 22l-5 4.5 6.5 1z" fill="#F4846A" ${O}/>`],
+    satay: ['Satay', () => `<g transform="rotate(-32 24 24)">${[14, 24, 34].map(y => `<path d="M3 ${y}H45" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M3 ${y}H45" stroke="#D9A066" stroke-width="2" stroke-linecap="round"/>${[11, 20, 29].map(x => `<rect x="${x}" y="${y - 4}" width="8" height="8" rx="2.5" fill="#A0562A" ${O}/>`).join('')}`).join('')}</g>`],
+    nasiLemak: ['Nasi lemak', () => `<path d="M2 32C6 14 30 6 46 12C43 32 22 44 2 32z" fill="#1F8A5B" ${O}/><path d="M7 30C18 22 32 16 42 14" fill="none" stroke="#6FBF8E" stroke-width="1.6"/>`
+      + `<path d="M7 33a9.5 9.5 0 0 1 19 0z" fill="#fff" ${O}/><ellipse cx="33" cy="20" rx="7.5" ry="6.5" fill="#fff" ${O}/><circle cx="33" cy="20" r="3.2" fill="#F6C343"/>`
+      + `<path d="M28 31c2-3.5 9-3.5 11 0s-2.5 5.5-5.5 5.5S26 34.5 28 31z" fill="#D22A1D" ${O}/>`],
+    prata: ['Roti prata', () => plate(39) + `<path d="M4 37C4 23 17 14 31 17L28 38z" fill="#E8B05A" ${O}/><path d="M9 38C11 28 20 23 29 25L28 38z" fill="#F7D28E" ${O}/>`
+      + `<circle cx="14" cy="27" r="1.5" fill="#B5713E"/><circle cx="21" cy="21" r="1.5" fill="#B5713E"/><circle cx="18" cy="33" r="1.5" fill="#B5713E"/>`
+      + `<path d="M31 31h15c0 5.5-3.4 9-7.5 9S31 36.5 31 31z" fill="#fff" ${O}/><ellipse cx="38.5" cy="31" rx="7.5" ry="2.2" fill="#C8641E" ${O}/>`],
+    thosai: ['Thosai', () => `<ellipse cx="24" cy="35" rx="22" ry="8" fill="#D6CEC0" ${O}/><path d="M4 31L40 19.5c3-1 5.5 6.5 2.5 7.8L6 37c-3 .6-4.6-4.6-2-6z" fill="#E2A04A" ${O}/>`
+      + `<ellipse cx="41.8" cy="23.4" rx="2.4" ry="4.2" transform="rotate(-18 41.8 23.4)" fill="#B5713E" ${O}/><path d="M15 28l1.5 5M23 25.5l1.5 5M31 23l1.5 5" stroke="#B5713E" stroke-width="1.6" stroke-linecap="round"/>`
+      + `<circle cx="11" cy="41" r="3.6" fill="#fff" ${O}/><circle cx="20" cy="42" r="3.6" fill="#E8772E" ${O}/>`],
+    kayaToast: ['Kaya toast', () => [[30, 6], [16, 2]].map(([y, x]) => `<rect x="${x + 4}" y="${y + 7}" width="34" height="8" rx="3" fill="#F2C77E" stroke="#8A5530" stroke-width="2"/><rect x="${x + 6}" y="${y + 3.5}" width="30" height="4.5" rx="1.5" fill="#6FA84A" ${O}/><rect x="${x + 16}" y="${y}" width="9" height="4.5" rx="1" fill="#FFF0A0" ${O}/><rect x="${x + 4}" y="${y - 5}" width="34" height="8" rx="3" fill="#F2C77E" stroke="#8A5530" stroke-width="2"/>`).join('')],
+    iceKachang: ['Ice kachang', () => { const id = 'ik' + (++uid), d = 'M7 33C7 17 15 9 24 9s17 8 17 24z'; return `<clipPath id="${id}"><path d="${d}"/></clipPath><g clip-path="url(#${id})"><rect width="48" height="48" fill="#E23B2E"/><path d="M0 20L48 12V20L0 28z" fill="#F28FAD"/><path d="M0 28L48 20V27L0 35z" fill="#F6C343"/><path d="M0 35L48 27V40H0z" fill="#3FA06B"/></g><path d="${d}" fill="none" ${O}/>`
+      + `<path d="M8 33h32l-4 9.5a2 2 0 0 1-1.9 1.3H13.9a2 2 0 0 1-1.9-1.3z" fill="#fff" ${O}/><circle cx="24" cy="8" r="3.6" fill="#D22A1D" ${O}/>`; }],
+    meeRebus: ['Mee rebus', () => bowl('#F28FAD') + `<ellipse cx="24" cy="22" rx="20" ry="4.5" fill="#A9652F" ${O}/><path d="M9 23q2.5-2.5 5 0t5 0M28 23q2.5-2.5 5 0t5 0" fill="none" stroke="#F6C343" stroke-width="2.6" stroke-linecap="round"/>`
+      + `<path d="M17 21a7 7 0 0 1 14 0z" fill="#fff" ${O}/><path d="M20.5 21a3.5 3.5 0 0 1 7 0z" fill="#F6C343"/><circle cx="36.5" cy="16.5" r="3.6" fill="#9CCB5A" ${O}/>`],
+    tehTarik: ['Teh tarik', () => `<g transform="rotate(-28 36 9)"><path d="M28 3h15l-1.6 11a2 2 0 0 1-2 1.7h-7.8a2 2 0 0 1-2-1.7z" fill="#fff" ${O}/></g>`
+      + `<path d="M29.5 14C25 18 24 21 24 26" fill="none" stroke="#B5713E" stroke-width="3" stroke-linecap="round"/>`
+      + `<path d="M13 25h22l-2.6 17.5a2 2 0 0 1-2 1.7H17.6a2 2 0 0 1-2-1.7z" fill="#D49A5E" ${O}/><path d="M13.6 25.5h20.8l-.7 4.5H14.3z" fill="#F7EBD3"/><path d="M13 25h22l-2.6 17.5a2 2 0 0 1-2 1.7H17.6a2 2 0 0 1-2-1.7z" fill="none" ${O}/>`],
+  };
+  const foodSVG = (n, size) => `<svg width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true">${FOOD[n][1]()}</svg>`;
+
+  /* cast + state illustrations */
+  const CAST = {
+    chUncle: { name: 'Uncle', skin: '#E7B47E', top: 'singlet' },
+    inUncle: { name: 'Uncle', skin: '#8A5A3C', top: 'singlet' },
+    makcik: { name: 'Makcik', skin: '#D9A577', top: 'baju', cloth: TEAL },
+    auntie: { name: 'Auntie', skin: '#EBC08F', top: 'tee', cloth: KAYA },
+  };
+  const CAST_ORDER = ['chUncle', 'makcik', 'inUncle', 'auntie'];
+  const hash = s => [...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
+  const castFor = id => CAST_ORDER[hash(id) % CAST_ORDER.length];
+  const eyes = `<circle cx="20.2" cy="22" r="1.3" fill="${INK}"/><circle cx="27.8" cy="22" r="1.3" fill="${INK}"/>`;
+  const smile = `<path d="M21 26.8c1.7 1.4 4.3 1.4 6 0" fill="none" stroke="${INK}" stroke-width="1.5" stroke-linecap="round"/>`;
+  function head(k) {
+    const c = CAST[k];
+    if (k === 'chUncle') return `<circle cx="24" cy="21.5" r="10.5" fill="${c.skin}"/><path d="M13.6 22.5c-.9-3.6-.2-6.4 1.9-8 0 2.6.4 4.9 1.2 7zM34.4 22.5c.9-3.6.2-6.4-1.9-8 0 2.6-.4 4.9-1.2 7z" fill="${INK}"/><path d="M18.5 12.8c3.4-1.9 7.6-2 11 0" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/><g fill="none" stroke="${INK}" stroke-width="1.6"><circle cx="19.8" cy="21.5" r="3"/><circle cx="28.2" cy="21.5" r="3"/><path d="M22.8 21.2h2.4"/></g><path d="M18.8 27.8c1.9-1.6 3.7-1.7 5.2-.6 1.5-1.1 3.3-1 5.2.6-1.8.8-3.6.7-5.2-.3-1.6 1-3.4 1.1-5.2.3z" fill="${INK}"/>`;
+    if (k === 'inUncle') return `<circle cx="24" cy="21.5" r="10.5" fill="${c.skin}"/><path d="M13.4 20.5c-.4-6.8 4.2-11 10.6-11s11 4.2 10.6 11c-1.2-2.8-3.6-4.6-7-5.2-2.6 1.5-6.4 2.1-10.4 2-1.8.8-3 1.8-3.8 3.2z" fill="${INK}"/>${eyes}<path d="M18.4 27.6c2-1.6 4-1.7 5.6-.5 1.6-1.2 3.6-1.1 5.6.5-1.5 1.7-3.7 2-5.6.9-1.9 1.1-4.1.8-5.6-.9z" fill="${INK}"/>`;
+    if (k === 'makcik') return `<path d="M24 8c-8.4 0-14.2 6.4-14.2 14.6 0 5 1.8 9.2 4.6 12.2h19.2c2.8-3 4.6-7.2 4.6-12.2C38.2 14.4 32.4 8 24 8z" fill="${c.cloth}"/><ellipse cx="24" cy="22.6" rx="8.4" ry="9.4" fill="${c.skin}"/>${eyes}${smile}`;
+    return `<circle cx="24" cy="9.5" r="4.5" fill="${INK}"/><circle cx="24" cy="21.5" r="10.5" fill="${c.skin}"/><path d="M13.5 21c-.3-6.6 4.3-10.8 10.5-10.8S34.8 14.4 34.5 21c-2-3.5-5.6-5.2-10.5-5.2S15.5 17.5 13.5 21z" fill="${INK}"/>${eyes}${smile}`;
+  }
+  function avatar(k = 'chUncle') {
+    const c = CAST[k];
+    const shoulders = c.top === 'singlet'
+      ? `<path d="M4.5 48c1.2-8 8.8-12 19.5-12s18.3 4 19.5 12z" fill="${c.skin}"/><path d="M12.5 48V38.2c3.2 2.2 7 3.3 11.5 3.3s8.3-1.1 11.5-3.3V48z" fill="${WHITE}"/>`
+      : `<path d="M4.5 48c1.2-8 8.8-12 19.5-12s18.3 4 19.5 12z" fill="${c.cloth}"/>`;
+    return `<svg class="ava" viewBox="0 0 48 48" role="img" aria-label="${c.name}"><circle cx="24" cy="24" r="24" fill="${GROUND}"/>${shoulders}${head(k)}</svg>`;
+  }
+  const arm = (k, d) => `<path d="${d}" fill="none" stroke="${CAST[k].top === 'baju' ? CAST[k].cloth : CAST[k].skin}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const hand = (k, x, y, r = 6.5) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${CAST[k].skin}"/>`;
+  function body(k) {
+    const c = CAST[k];
+    if (c.top === 'singlet') return `<rect x="72" y="50" width="16" height="14" fill="${c.skin}"/><path d="M50 78c0-10 12-16 30-16s30 6 30 16v10H50z" fill="${c.skin}"/><path d="M60 68c4 6 11 9 20 9s16-3 20-9c4 2 6 6 6 10v36H54V78c0-4 2-8 6-10z" fill="${WHITE}"/><path d="M54 112h52v18c0 2-2 4-4 4H84l-4-10-4 10H58c-2 0-4-2-4-4z" fill="${INK}"/><rect x="62" y="132" width="10" height="18" rx="4" fill="${c.skin}"/><rect x="88" y="132" width="10" height="18" rx="4" fill="${c.skin}"/><rect x="57" y="148" width="19" height="6" rx="3" fill="${INK}"/><rect x="84" y="148" width="19" height="6" rx="3" fill="${INK}"/>`;
+    if (c.top === 'baju') return `<path d="M50 78c0-10 12-16 30-16s30 6 30 16v70H50z" fill="${c.cloth}"/><rect x="57" y="148" width="19" height="6" rx="3" fill="${INK}"/><rect x="84" y="148" width="19" height="6" rx="3" fill="${INK}"/>`;
+    return `<rect x="72" y="50" width="16" height="14" fill="${c.skin}"/><path d="M50 78c0-10 12-16 30-16s30 6 30 16v36H50z" fill="${c.cloth}"/><path d="M54 112h52v36H85l-5-20-5 20H54z" fill="${INK}"/><rect x="55" y="148" width="21" height="6" rx="3" fill="${INK}"/><rect x="84" y="148" width="21" height="6" rx="3" fill="${INK}"/>`;
+  }
+  const sleeves = k => CAST[k].top === 'tee' ? `<circle cx="56" cy="76" r="9" fill="${CAST[k].cloth}"/><circle cx="104" cy="76" r="9" fill="${CAST[k].cloth}"/>` : '';
+  const HEAD = k => `<g transform="translate(32 -6) scale(2)">${head(k)}</g>`;
+  const star = (x, y) => `<path d="M${x} ${y - 8}l2.5 5.5 5.5 2.5-5.5 2.5-2.5 5.5-2.5-5.5-5.5-2.5 5.5-2.5z" fill="${KAYA}"/>`;
+  const SPOTS = {
+    empty: { cast: 'makcik', caption: 'Paiseh, cannot find this one leh.', draw: k => body(k) + arm(k, 'M57 80L40 98L31 82') + arm(k, 'M103 80L120 98L129 82') + sleeves(k) + hand(k, 30, 78) + hand(k, 130, 78) + HEAD(k) },
+    loading: { cast: 'auntie', caption: 'Wait ah, pulling kopi…', draw: k => body(k) + arm(k, 'M103 80L122 62L128 40') + arm(k, 'M57 80L74 106L120 118') + sleeves(k) + hand(k, 128, 36) + hand(k, 122, 118) + HEAD(k) + `<path class="stream" d="M147 30C150 60 141 88 137 112" fill="none" stroke="${TEH}" stroke-width="5" stroke-linecap="round"/><rect x="117" y="14" width="24" height="24" rx="4" fill="${INK}"/><path d="M140 20l9 5-9 5z" fill="${INK}"/><path d="M126 110h24l-2 18a3 3 0 0 1-3 3h-14a3 3 0 0 1-3-3z" fill="${INK}"/>` },
+    far: { cast: 'makcik', caption: 'You overseas ah?', draw: k => body(k) + `<rect x="104" y="108" width="44" height="42" rx="6" fill="${TEH}"/><rect x="115" y="108" width="3.5" height="42" fill="${INK}"/><rect x="133.5" y="108" width="3.5" height="42" fill="${INK}"/><path d="M118 108v-7h16v7" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>` + arm(k, 'M57 80L40 62L38 42') + arm(k, 'M103 80L118 94L124 99') + sleeves(k) + hand(k, 38, 38) + hand(k, 126, 100) + HEAD(k) },
+    good: { cast: 'auntie', caption: 'Shiok, nothing closed here!', draw: k => body(k) + arm(k, 'M57 80L50 106') + arm(k, 'M103 80L124 88L126 66') + sleeves(k) + hand(k, 49, 110) + `<rect x="121.5" y="40" width="7" height="16" rx="3.5" fill="${CAST[k].skin}"/>` + hand(k, 126, 60, 8) + HEAD(k) + star(146, 40) + star(26, 52) },
+  };
+  const spot = (state, k = SPOTS[state].cast) => `<svg class="spot" viewBox="0 0 160 160" aria-hidden="true">${SPOTS[state].draw(k)}</svg>`;
+  const spotFig = (state, extra = '') => `<figure class="spot-fig">${spot(state)}<figcaption>${SPOTS[state].caption}</figcaption>${extra}</figure>`;
+  const note = (line, k) => `<div class="note"><p>${esc(line)}</p><div class="sig">${CAST[k].name} ${avatar(k)}</div></div>`;
+
+  return { icon, pill, placardParts, tile, note, quiet, goSign, hero, fmt, esc, short, kind, WORD, dist, FOOD, foodSVG, castFor, SPOTS, spot, spotFig };
+})();
+
+(() => {
+const { icon, esc, short, fmt, dist, kind } = UI;
+const $ = id => document.getElementById(id);
+const S = { date: '2026-10-20', here: null, near: false, geo: 'idle', chope: new Set(), aFilter: '', aStatus: null, aView: 'home', eatSeen: false, rot: 0 };
+try { const v = JSON.parse(localStorage.getItem('usc-chope') || '[]'); if (Array.isArray(v)) S.chope = new Set(v); } catch {}
+const saveChope = () => { try { localStorage.setItem('usc-chope', JSON.stringify([...S.chope])); } catch {} };
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const list = () => DATA[S.date];
+const byId = id => list().find(c => c.id === id);
+const RANK = { closed: 0, 'closing-soon': 1, unknown: 2, open: 3 };
+const WORDF = { closed: 'Closed', soon: 'Closing soon', unknown: 'Not sure', open: 'Open' };
+const PICKS = ['maxwell-food-centre-kim-hua-market', 'old-airport-road-blk-51-51-old-airport-road-food-centre-and-shopping-mall', 'tiong-bahru-market'];
+const PLACES = [['Adam Road', 1.324131966, 103.8141632], ['Tampines', 1.3530, 103.9450], ['Jurong West', 1.3404, 103.7090], ['Toa Payoh', 1.3343, 103.8563], ["I'm overseas", 3.1390, 101.6869]];
+
+function km(a, b) { const R = 6371, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng); const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); }
+const nearest = n => list().map(c => ({ c, d: km(S.here, c) })).sort((a, b) => a.d - b.d).slice(0, n);
+const matches = q => { q = q.trim().toLowerCase(); if (!q) return []; return list().filter(c => c.name.toLowerCase().includes(q) || c.address.toLowerCase().includes(q)).sort((a, b) => (a.name.toLowerCase().indexOf(q)) - (b.name.toLowerCase().indexOf(q)) || RANK[a.status.kind] - RANK[b.status.kind]); };
+const KCOUNT = () => { const L = list(), n = k => L.filter(c => kind(c) === k).length; return { closed: n('closed'), soon: n('soon'), unknown: n('unknown'), open: n('open') }; };
+const inSG = p => p.lat >= 1.15 && p.lat <= 1.48 && p.lng >= 103.6 && p.lng <= 104.1;
+const pickName = c => short(c.name).replace(/ Blk.*$/, '').replace(/ (Food Centre|Market).*$/, '');
+
+let toastT;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+
+/* placards: shrink a tile's one-line placard text until it fits, never clip */
+function fitPlacards(root = document) {
+  root.querySelectorAll('.placard.sm .en, .placard.sm .langs').forEach(el => {
+    el.style.fontSize = '';
+    if (!el.clientWidth) return;
+    let fs = parseFloat(getComputedStyle(el).fontSize), n = 0;
+    while (el.scrollWidth > el.clientWidth + 0.5 && fs > 8 && n++ < 24) { fs -= 0.5; el.style.fontSize = fs + 'px'; }
+  });
+}
+
+/* location: try the real thing, else the pretend picker */
+function getPos() {
+  return new Promise((res, rej) => {
+    const t = setTimeout(() => rej(new Error('timeout')), 4000);
+    try {
+      if (!navigator.geolocation) throw new Error('unavailable');
+      navigator.geolocation.getCurrentPosition(p => { clearTimeout(t); res({ lat: p.coords.latitude, lng: p.coords.longitude }); }, e => { clearTimeout(t); rej(e); }, { enableHighAccuracy: false, timeout: 4000, maximumAge: 300000 });
+    } catch (e) { clearTimeout(t); rej(e); }
+  });
+}
+async function findNear() {
+  if (S.here) { S.near = true; renderHead(); renderBody(); return; }
+  S.geo = 'locating'; renderHead(); renderBody();
+  try { setHere(await getPos()); }
+  catch { S.geo = 'idle'; renderHead(); renderBody(); openPicker(); }
+}
+function setHere(pos) {
+  if (inSG(pos)) { S.here = pos; S.geo = 'ok'; S.near = true; } else { S.here = null; S.geo = 'far'; S.near = false; }
+  S.aFilter = '';
+  setAView('home');
+}
+let lastFocus = null;
+function openPicker() {
+  lastFocus = document.activeElement;
+  $('pk-list').innerHTML = PLACES.map(([n], i) => `<button class="pk${i === 4 ? ' far' : ''}" data-pk="${i}">${icon(i === 4 ? 'plane' : 'pin', 'i20')}${esc(n)}</button>`).join('');
+  $('picker').hidden = false; $('pk-list').querySelector('button').focus();
+}
+const closeModal = id => { $(id).hidden = true; lastFocus && lastFocus.isConnected && lastFocus.focus({ preventScroll: true }); };
+$('picker').addEventListener('click', e => {
+  const b = e.target.closest('[data-pk]');
+  if (b) { const [, lat, lng] = PLACES[+b.dataset.pk]; $('picker').hidden = true; setHere({ lat, lng }); return; }
+  if (e.target.closest('[data-pk-close]') || e.target === $('picker')) closeModal('picker');
+});
+
+/* share + chope */
+function shareText(c) {
+  const n = short(c.name), a = c.alt && short(c.alt.name);
+  if (c.status.kind === 'closed') return `Uncle says ${n} closed today, go ${a} instead lah`;
+  if (c.status.kind === 'closing-soon') return `Uncle says ${n} closing ${fmt(c.status.closure.start)}, makan there before that lah`;
+  if (c.status.kind === 'open') return `Uncle says ${n} open today. Makan there?`;
+  return `Uncle not sure if ${n} open today, better call first`;
+}
+function tellKakis(c) {
+  let link = ''; try { link = location.href.split('#')[0]; } catch {}
+  const txt = `${shareText(c)} ${link}`.trim();
+  const fallback = () => {
+    const box = $('sh-copy'), ta = box.querySelector('textarea');
+    box.hidden = false; ta.value = txt; ta.focus(); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch {}
+    toast(ok ? 'Copied, send it to your kakis' : 'Text selected. Copy it and send to your kakis');
+  };
+  try {
+    const p = navigator.clipboard && navigator.clipboard.writeText(txt);
+    if (!p) { fallback(); return; }
+    p.then(() => toast('Copied, send it to your kakis'), fallback);
+  } catch { fallback(); }
+}
+function toggleChope(id) {
+  S.chope.has(id) ? S.chope.delete(id) : S.chope.add(id); saveChope();
+  toast(S.chope.has(id) ? 'Choped! Tissue on the table liao.' : 'Unchoped.');
+  renderBody();
+}
+
+/* home */
+function headlineHTML() {
+  const n = KCOUNT(), pl = x => `${x} place${x === 1 ? '' : 's'}`;
+  if (!n.closed && !n.soon) return 'Today nothing closed. Makan anywhere, shiok!';
+  const c = `<button class="cnt cnt-closed" data-fk="closed">${pl(n.closed)} closed</button>`, so = `<button class="cnt cnt-soon" data-fk="soon">${n.soon} more closing soon</button>`;
+  return n.closed > 10 ? `Alamak! Today ${c}, ${so}.` : `Today ${c} leh, ${so}.`;
+}
+function renderHead() {
+  let top;
+  if (S.geo === 'locating') top = `<button class="btn btn-primary" disabled><span class="kl"></span>Uncle finding you…</button>`;
+  else if (S.near && S.here) top = `<div class="nearon">${icon('pin', 'i20')}<span>Showing the 4 nearest to you</span><button class="btn btn-text" data-unnear>Reset</button></div>`;
+  else top = `<button class="btn btn-primary" data-near>${icon('pin', 'i20')}Find makan near me</button>`;
+  $('ahead').innerHTML = `<header class="top"><!--@LOGO@--><span class="today">${fmt(S.date)}</span></header>` + `<p class="headline">${headlineHTML()}</p>` + top +
+    `<div class="search${S.aFilter ? ' filled' : ''}" id="asearch">${icon('search', 'i20')}<input id="aq" type="search" placeholder="Search hawker centre" autocomplete="off" aria-label="Search hawker centre" value="${esc(S.aFilter)}"><button class="clr" id="aclr" aria-label="Clear search"><span>${icon('close')}</span></button>` +
+    `<div class="sugg" id="asugg" hidden><b>Try</b><div class="chips">${PICKS.map(byId).map(c => `<button class="chip" data-open="${c.id}">${esc(pickName(c))}</button>`).join('')}</div></div></div>`;
+  const q = $('aq'), sg = $('asugg');
+  const syncSugg = () => { sg.hidden = !(document.activeElement === q && !q.value); };
+  q.addEventListener('focus', syncSugg);
+  q.addEventListener('blur', () => setTimeout(syncSugg, 150));
+  q.addEventListener('input', () => { S.aFilter = q.value; $('asearch').classList.toggle('filled', !!S.aFilter); syncSugg(); renderBody(); });
+  q.addEventListener('keydown', e => { if (e.key === 'Enter') { const r = matches(q.value); if (r[0]) { q.blur(); openInA(r[0]); } } if (e.key === 'Escape') q.blur(); });
+  $('aclr').onclick = () => { q.value = ''; S.aFilter = ''; $('asearch').classList.remove('filled'); renderBody(); q.focus(); };
+  renderFab();
+}
+function renderFab() {
+  $('afab').innerHTML = `<button class="btn fab${S.eatSeen ? ' round' : ''}" data-eat aria-label="Eat where ah?">${icon('susan')}<span class="lbl">Eat where ah?</span></button>`;
+}
+const tileFor = (c, d) => UI.tile(c, { km: d, choped: S.chope.has(c.id) });
+const grid = (rows, near) => `<div class="tiles">${rows.map(c => tileFor(c, near ? km(S.here, c) : undefined)).join('')}</div>`;
+const seeAll = label => `<button class="see-all" data-all>${label}${icon('arrow', 'i20')}</button>`;
+const stateCard = (state, sub) => `<div class="statecard">${UI.spot(state)}<div>${UI.SPOTS[state].caption}<p>${esc(sub)}</p></div></div>`;
+function renderHomeBody() {
+  const b = $('abody'), L = list();
+  if (S.aFilter) {
+    const r = matches(S.aFilter);
+    b.innerHTML = r.length ? grid(r.slice(0, 6)) + (r.length > 6 ? seeAll(`See all ${r.length} matches`) : '')
+      : UI.spotFig('empty', `<p>Try a road or estate, like Bedok or Tiong Bahru.</p>`);
+    return;
+  }
+  if (S.geo === 'locating') { b.innerHTML = UI.spotFig('loading'); return; }
+  const ch = [...S.chope].map(byId).filter(Boolean);
+  const near = S.near && S.here;
+  const chopeHTML = ch.length ? `<h2 class="sec">${icon('tissueOn', 'i20')}Your chope</h2>` + grid(ch.slice(0, 4), near) : '';
+  if (near) {
+    const rows = nearest(4 + ch.length).map(x => x.c).filter(c => !S.chope.has(c.id)).slice(0, 4);
+    b.innerHTML = chopeHTML + (ch.length ? '<h2 class="sec">Nearest to you</h2>' : '') + grid(rows, true) + seeAll(`See all ${L.length} centres`);
+    return;
+  }
+  const shut = L.filter(c => ['closed', 'soon'].includes(kind(c)) && !S.chope.has(c.id)).sort((a, c) => RANK[a.status.kind] - RANK[c.status.kind] || a.name.localeCompare(c.name));
+  const geo = S.geo === 'far' ? stateCard('far', "Showing today's closures for all of Singapore.") : '';
+  const head = ch.length && shut.length ? '<h2 class="sec">Shut or shutting soon</h2>' : '';
+  if (!shut.length) { b.innerHTML = chopeHTML + geo + UI.spotFig('good') + seeAll(`See all ${L.length} centres`); return; }
+  b.innerHTML = chopeHTML + geo + head + grid(shut.slice(0, geo || ch.length ? 4 : 6)) + seeAll(`See all ${L.length} centres`);
+}
+function renderWall() {
+  let rows = S.aFilter ? matches(S.aFilter) : [...list()];
+  if (S.aStatus) rows = rows.filter(c => kind(c) === S.aStatus);
+  const near = S.near && S.here;
+  if (near) rows.sort((a, b) => km(S.here, a) - km(S.here, b));
+  else if (!S.aFilter) rows.sort((a, b) => (S.chope.has(b.id) - S.chope.has(a.id)) || RANK[a.status.kind] - RANK[b.status.kind] || a.name.localeCompare(b.name));
+  $('wallhead').innerHTML = `<button class="xbtn" data-home aria-label="Back to today">${icon('back', 'i20')}</button><h2>${S.aStatus ? `${rows.length} ${WORDF[S.aStatus].toLowerCase()}` : S.aFilter ? `${rows.length} matches` : `All ${rows.length} centres`}</h2>`;
+  $('wallchip').innerHTML = S.aStatus ? `<button class="showing" data-unfilter aria-label="Clear filter: ${WORDF[S.aStatus]}">Showing: ${WORDF[S.aStatus]}<span class="x">${icon('close')}</span></button>` : '';
+  $('wall').innerHTML = rows.map(c => tileFor(c, near ? km(S.here, c) : undefined)).join('') || UI.spotFig('good');
+}
+function renderBody() { if (S.aView === 'wall') renderWall(); else renderHomeBody(); fitPlacards(); }
+function setAView(v) {
+  S.aView = v; $('ahome').hidden = v !== 'home'; $('awall').hidden = v !== 'wall';
+  if (v === 'home') { S.aStatus = null; renderHead(); }
+  renderBody(); window.scrollTo(0, 0);
+}
+const replay = (el, cls) => { if (REDUCED || !el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+const tileOf = id => [...document.querySelectorAll(`[data-tile="${id}"]`)].find(t => t.offsetParent);
+function openInA(c) {
+  const el = tileOf(c.id);
+  if (el) { el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' }); replay(el, 'rattle'); }
+  setTimeout(() => openSheet(c), REDUCED || !el ? 0 : 450);
+}
+function goA(c, from) {
+  replay(from && tileOf(from.id), 'slam');
+  setTimeout(() => {
+    let el = tileOf(c.id);
+    if (!el) { S.aFilter = ''; S.aStatus = null; setAView('wall'); el = tileOf(c.id); }
+    if (!el) return;
+    el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' });
+    setTimeout(() => { replay(el, 'reveal'); replay(el, 'flash'); el.querySelector('.tile-hit').focus({ preventScroll: true }); }, REDUCED ? 0 : 500);
+  }, REDUCED ? 0 : 450);
+}
+document.querySelector('.app').addEventListener('click', e => {
+  const o = e.target.closest('[data-open]'); if (o) { openInA(byId(o.dataset.open)); return; }
+  if (e.target.closest('[data-near]')) { findNear(); return; }
+  const f = e.target.closest('[data-fk]'); if (f) { S.aStatus = f.dataset.fk; setAView('wall'); return; }
+  if (e.target.closest('[data-all]')) { S.aStatus = null; setAView('wall'); return; }
+  if (e.target.closest('[data-home]')) { S.aFilter = ''; setAView('home'); return; }
+  if (e.target.closest('[data-unfilter]')) { S.aStatus = null; renderBody(); return; }
+  if (e.target.closest('[data-unnear]')) { S.near = false; renderHead(); renderBody(); return; }
+  const t = e.target.closest('.tile-hit'); if (!t) return;
+  replay(t.parentNode, 'rattle');
+  setTimeout(() => openSheet(byId(t.dataset.id)), REDUCED ? 0 : 250);
+});
+
+/* sheet */
+const sheet = $('sheet');
+let sheetC = null;
+function openSheet(c, quiet) {
+  if (!quiet) lastFocus = document.activeElement;
+  sheetC = c;
+  const k = kind(c);
+  $('sh-name').textContent = c.name;
+  const addr = c.remarks.includes(c.address) ? '' : c.address;
+  $('sh-addr').textContent = [addr, S.here ? `${dist(km(S.here, c))} from you` : ''].filter(Boolean).join(' · ');
+  $('sh-addr').hidden = !$('sh-addr').textContent;
+  $('sh-hero').innerHTML = UI.hero(c);
+  $('sh-note').innerHTML = UI.note(c.line, UI.castFor(c.id));
+  const ac = c.alt && byId(c.alt.id);
+  $('sh-alt').innerHTML = ac ? UI.goSign({ label: k === 'soon' ? 'Or go here' : 'Go here instead', name: short(ac.name), meta: `Open today · ${c.alt.km} km away`, attr: 'id="goalt"' }) : '';
+  $('sh-rem').innerHTML = UI.quiet(c);
+  const ch = $('sh-chope'), on = S.chope.has(c.id);
+  ch.setAttribute('aria-pressed', on); ch.setAttribute('aria-label', on ? 'Choped. Tap to unchope' : 'Chope this centre'); ch.innerHTML = icon(on ? 'tissueOn' : 'tissue', 'i20');
+  if (!quiet) { $('sh-copy').hidden = true; }
+  sheet.hidden = false;
+  const panel = sheet.querySelector('.panel');
+  if (!quiet) { panel.scrollTop = 0; panel.focus({ preventScroll: true }); }
+}
+const closeSheet = () => { if (sheet.hidden) return; sheet.hidden = true; lastFocus && lastFocus.isConnected && lastFocus.focus({ preventScroll: true }); };
+$('sh-x').innerHTML = icon('close', 'i20');
+$('sh-share').innerHTML = icon('share', 'i20');
+sheet.addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) { closeSheet(); return; }
+  if (e.target.closest('#goalt')) { const a = byId(sheetC.alt.id), from = sheetC; sheet.hidden = true; goA(a, from); return; }
+  if (e.target.closest('#sh-chope')) { toggleChope(sheetC.id); openSheet(sheetC, true); return; }
+  if (e.target.closest('#sh-share')) tellKakis(sheetC);
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!$('spin').hidden) closeModal('spin');
+  else if (!$('picker').hidden) closeModal('picker');
+  else closeSheet();
+});
+
+/* Eat where ah? */
+const WHEEL = ['chickenRice', 'laksa', 'satay', 'nasiLemak', 'prata', 'thosai', 'kayaToast', 'iceKachang', 'meeRebus'];
+const STEP = 360 / WHEEL.length;
+const susan = $('susan');
+susan.innerHTML = '<circle cx="120" cy="120" r="120" class="f-cream3"/>' + WHEEL.map((f, i) => `<g transform="rotate(${i * STEP} 120 120)"><circle cx="120" cy="33" r="27" class="f-paper"/><svg x="98" y="11" width="44" height="44" viewBox="0 0 48 48">${UI.FOOD[f][1]()}</svg></g>`).join('')
+  + '<circle cx="120" cy="120" r="34" class="f-cream2"/><svg x="96" y="96" width="48" height="48" viewBox="0 0 48 48">' + UI.FOOD.tehTarik[1]() + '</svg>';
+const QUIPS = ['Can! Go makan there lah.', 'Shiok choice, confirm open.', 'Boleh! Go go go.', "Don't paiseh, just go.", 'Tapau also can.'];
+const angleNow = () => { const m = getComputedStyle(susan).transform; if (!m || m === 'none') return 0; const v = new DOMMatrixReadOnly(m); return Math.atan2(v.b, v.a) * 180 / Math.PI; };
+const setRot = (deg, ms, ease = 'cubic-bezier(.15,.6,.25,1)') => { susan.style.transition = ms ? `transform ${ms}ms ${ease}` : 'none'; susan.style.transform = `rotate(${deg}deg)`; };
+function eatWhere() {
+  lastFocus = document.activeElement;
+  const spin = $('spin'), act = $('spinact');
+  let pool = list().filter(c => c.status.kind === 'open');
+  pool = S.here ? pool.map(c => ({ c, d: km(S.here, c) })).sort((a, b) => a.d - b.d).slice(0, 8).map(x => x.c) : pool.sort(() => Math.random() - .5).slice(0, 12);
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  let done = false, to;
+  const land = () => {
+    if (done) return; done = true; clearTimeout(to);
+    const a = REDUCED ? -Math.floor(Math.random() * WHEEL.length) * STEP : angleNow();
+    const i = ((Math.round(-a / STEP) % WHEEL.length) + WHEEL.length) % WHEEL.length;
+    const off = (((-(i * STEP) - a) % 360) + 540) % 360 - 180;
+    setRot(a, 0); void susan.getBoundingClientRect();
+    S.rot = a + off; setRot(S.rot, REDUCED ? 0 : 260, 'ease-out');
+    $('dish').textContent = `Craving ${UI.FOOD[WHEEL[i]][0].toLowerCase()}?`;
+    if (!REDUCED && $('dish').animate) $('dish').animate([{ transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 260, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+    $('quip').textContent = QUIPS[Math.floor(Math.random() * QUIPS.length)];
+    const d = S.here ? ` · ${dist(km(S.here, pick))}` : '';
+    act.innerHTML = UI.goSign({ label: 'Go here and hunt for it', name: short(pick.name), meta: `Open today${d}`, attr: 'data-act="show"' }) + `<div class="acts"><button class="btn btn-soft" data-act="again">${icon('susan', 'i20')}Spin again</button><button class="btn btn-soft" data-act="close">Close</button></div>`;
+    act.hidden = false; act.querySelector('.go-sign').focus({ preventScroll: true });
+  };
+  spin.hidden = false; act.hidden = true; $('dish').textContent = ''; $('quip').textContent = 'Tap anywhere to stop';
+  if (!S.eatSeen) { S.eatSeen = true; renderFab(); }
+  spin.onclick = e => {
+    e.stopPropagation();
+    if (!done) { land(); return; }
+    const b = e.target.closest('[data-act]');
+    if (!b) { if (e.target === spin) closeModal('spin'); return; }
+    if (b.dataset.act === 'again') eatWhere();
+    else { spin.hidden = true; if (b.dataset.act === 'show') openInA(pick); else closeModal('spin'); }
+  };
+  if (REDUCED) { land(); return; }
+  setRot(S.rot, 0); void susan.getBoundingClientRect();
+  setRot(S.rot + 900 + Math.random() * 360, 1500);
+  to = setTimeout(land, 1550);
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-eat]')) eatWhere(); });
+
+/* demo bar */
+function setDate(d) {
+  S.date = d; S.aStatus = null; sheet.hidden = true;
+  document.querySelectorAll('.dates button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === d));
+  if (S.aView === 'wall') renderHead(); setAView(S.aView);
+}
+document.querySelector('.dates').addEventListener('click', e => { const b = e.target.closest('button'); b && setDate(b.dataset.d); });
+$('reset').addEventListener('click', () => {
+  S.chope.clear(); try { localStorage.removeItem('usc-chope'); } catch {}
+  S.here = null; S.near = false; S.geo = 'idle'; S.aFilter = '';
+  setAView('home'); toast('Demo reset. Chope and location cleared.');
+});
+
+setAView('home');
+try { document.fonts && document.fonts.ready.then(() => fitPlacards()); } catch {}
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => fitPlacards(), 120); });
+})();
+</script>

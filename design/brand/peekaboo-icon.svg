@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Peekaboo Shutter app icon"><rect width="512" height="512" rx="114" fill="#F6C343"/><g transform="translate(51 51) scale(4.1)"><rect x="6" y="8" width="88" height="86" rx="12" fill="#1E1B18"/>
+<rect x="15" y="17" width="70" height="77" fill="#1E1B18"/>
+<rect x="15" y="17" width="70" height="44" fill="#E23B2E"/>
+<path d="M15 28H85M15 39H85M15 50H85" stroke="#B8271C" stroke-width="3.5"/>
+<rect x="44" y="55" width="12" height="6" rx="2" fill="#F6C343"/>
+<ellipse cx="38" cy="75" rx="8.5" ry="8" fill="#FFFFFF"/><ellipse cx="62" cy="75" rx="8.5" ry="8" fill="#FFFFFF"/>
+<circle cx="40.5" cy="72.5" r="4" fill="#1E1B18"/><circle cx="64.5" cy="72.5" r="4" fill="#1E1B18"/>
+<path d="M29 66.5 Q38 62 47 66.5M53 66.5 Q62 62 71 66.5" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"/></g></svg>
