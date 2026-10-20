@@ -1,0 +1,19 @@
+{
+  "name": "uncle-says-closed",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "snapshot": "node --env-file-if-exists=.env --import tsx scripts/snapshot.ts",
+    "snapshot:fixture": "tsx scripts/snapshot.ts --fixture scripts/fixtures/closures-2026-10-20.csv",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "csv-parse": "^7.0.3",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}
