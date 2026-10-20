@@ -4,10 +4,13 @@ import { byDistance, searchCentres } from './domain/find.ts'
 import { nearestOpen } from './domain/status.ts'
 import { todayInSingapore } from './domain/today.ts'
 import type { Centre, Snapshot } from './domain/types.ts'
-import { board, centreList, centreView, footer, noMatches, uncleBubble } from './ui/view.ts'
+import { nearestArea, parseForecast, weatherLine } from './domain/weather.ts'
+import { board, centreHref, centreList, centreView, footer, noMatches, uncleBubble } from './ui/view.ts'
 
 const NEAR_ME_COUNT = 10
 const SEARCH_LIMIT = 30
+const FORECAST_URL = 'https://api-open.data.gov.sg/v2/real-time/api/two-hr-forecast'
+const FORECAST_TIMEOUT_MS = 3000
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
 
@@ -68,6 +71,17 @@ function wireHome(centres: Centre[]) {
   })
 }
 
+async function showWeather(centre: Centre) {
+  const forecast = await fetch(FORECAST_URL, { signal: AbortSignal.timeout(FORECAST_TIMEOUT_MS) })
+    .then(res => (res.ok ? res.json() : undefined))
+    .then(parseForecast)
+    .catch(() => undefined)
+  const slot = document.getElementById('weather')
+  if (!forecast || !slot || location.hash !== centreHref(centre)) return
+  slot.textContent = weatherLine(nearestArea(forecast, centre), forecast.validText)
+  slot.hidden = false
+}
+
 function route(centres: Centre[]) {
   const today = todayInSingapore()
   const id = decodeURIComponent(location.hash.match(/^#\/c\/(.+)$/)?.[1] ?? '')
@@ -88,6 +102,7 @@ function route(centres: Centre[]) {
        ${uncleBubble('Uncle never heard of this one. Go back and search again.')}`
   window.scrollTo(0, 0)
   el.centre.querySelector<HTMLElement>('h1')?.focus()
+  if (centre) void showWeather(centre)
 }
 
 async function loadSnapshot(): Promise<Snapshot> {

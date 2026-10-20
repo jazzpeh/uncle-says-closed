@@ -123,6 +123,7 @@ export function centreView(
     ${address}
     ${uncleBubble(uncleSays(status, c))}
     <p class="centre__status">${chip(status)}<span>${statusDetail(status, today)}</span></p>
+    <p class="weather" id="weather" hidden></p>
     ${remarks ? `<aside class="notice" aria-label="NEA remarks"><p class="notice__from">NEA notice</p><p class="notice__text">${esc(remarks)}</p></aside>` : ''}
     ${instead}
     ${stallPlates(c)}
