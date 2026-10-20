@@ -1,13 +1,11 @@
 import { addDays, diffDays, quarterOf, yearOf } from './today.ts'
-import type { Centre, Closure, IsoDate, Status } from './types.ts'
-
-type Dated = Exclude<Closure, { kind: 'tbc' }>
+import type { Centre, Closure, DatedClosure, IsoDate, Status } from './types.ts'
 
 const SOON_DAYS = 7
 
-const isDated = (c: Closure): c is Dated => c.kind !== 'tbc'
+const isDated = (c: Closure): c is DatedClosure => c.kind !== 'tbc'
 
-function reopeningAfter(closure: Dated, dated: Dated[]): IsoDate {
+function reopeningAfter(closure: DatedClosure, dated: DatedClosure[]): IsoDate {
   let reopens = addDays(closure.end, 1)
   for (let chained = dated.find(c => c.start <= reopens && reopens <= c.end); chained; ) {
     reopens = addDays(chained.end, 1)

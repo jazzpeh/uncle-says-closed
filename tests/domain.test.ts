@@ -92,9 +92,35 @@ describe('nearestOpen', () => {
 })
 
 describe('uncleSays', () => {
-  it('speaks the first closed line for Bukit Timah Market', () => {
-    const c = centreNamed('Bukit Timah Market')
-    const s = statusOn(c, iso('2026-10-20'))
-    expect(uncleSays(s, c, () => 0)).toBe('Aiyoh, Bukit Timah Market closed for cleaning lah. Open back Tue 1 Jan 2030.')
+  const speak = (name: string, date: string, i = 0) => {
+    const c = centreNamed(name)
+    return uncleSays(statusOn(c, iso(date)), c, () => i)
+  }
+
+  it('speaks a works line for Bukit Timah Market redevelopment', () => {
+    const line = speak('Bukit Timah Market', '2026-10-20')
+    expect(line).toBe('Aiyoh, Bukit Timah Market closed for works lah. Open back Tue 1 Jan 2030.')
+    expect(line).not.toMatch(/clean|wash/i)
+  })
+
+  it('speaks a cleaning line for Adam Road Food Centre', () => {
+    expect(speak('Adam Road Food Centre', '2026-12-08')).toBe(
+      'Aiyoh, Adam Road Food Centre closed for cleaning lah. Open back Wed 9 Dec.',
+    )
+  })
+
+  it('never mentions cleaning in any works line', () => {
+    let checked = 0
+    for (const c of centres) {
+      for (const date of ['2026-10-20', '2026-12-08']) {
+        const s = statusOn(c, iso(date))
+        if ((s.kind !== 'closed' && s.kind !== 'closing-soon') || s.closure.kind !== 'works') continue
+        for (const i of [0, 1, 2]) {
+          expect(uncleSays(s, c, () => i)).not.toMatch(/clean|wash/i)
+          checked++
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(0)
   })
 })

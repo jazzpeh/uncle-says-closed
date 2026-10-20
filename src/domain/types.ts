@@ -6,6 +6,8 @@ export type Closure =
   | { kind: 'works'; start: IsoDate; end: IsoDate; remarks?: string }
   | { kind: 'tbc'; quarter: Quarter }
 
+export type DatedClosure = Exclude<Closure, { kind: 'tbc' }>
+
 export type Centre = {
   id: string
   name: string
@@ -20,9 +22,9 @@ export type Centre = {
 }
 
 export type Status =
-  | { kind: 'closed'; closure: Closure; reopensOn: IsoDate }
-  | { kind: 'closing-soon'; closure: Closure; daysUntil: number }
+  | { kind: 'closed'; closure: DatedClosure; reopensOn: IsoDate }
+  | { kind: 'closing-soon'; closure: DatedClosure; daysUntil: number }
   | { kind: 'unknown'; quarter: Quarter }
-  | { kind: 'open'; next?: Closure }
+  | { kind: 'open'; next?: DatedClosure }
 
 export type Snapshot = { fetchedAt: string; centres: Centre[] }
