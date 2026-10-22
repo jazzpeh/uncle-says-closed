@@ -131,13 +131,81 @@ a{color:var(--pandan-press)}
 .shutter .placard.sm{width:100%;min-width:0;transform:rotate(-8deg);box-shadow:0 0 0 3px var(--paper)}
 .shutter .placard.sm .langs{flex-wrap:wrap;white-space:normal}
 .s-open .shutter{display:none}
-.tile.rattle .shutter{animation:rattle .55s}
+.rattle :is(.shutter,.roller){animation:rattle .55s}
 @keyframes rattle{0%,100%{transform:translateY(var(--y,0))}35%,60%{transform:translateY(calc(var(--y,0%) - 8%))}}
-.tile.slam .shutter{animation:slam .45s cubic-bezier(.6,0,.9,.4)}
+.slam :is(.shutter,.roller){animation:slam .45s cubic-bezier(.6,0,.9,.4)}
 @keyframes slam{0%{transform:translateY(-100%)}85%,100%{transform:translateY(0)}}
-.tile.reveal .shutter{animation:reveal 1s ease-in-out}
+.reveal :is(.shutter,.roller){animation:reveal 1s ease-in-out}
 @keyframes reveal{0%{transform:translateY(0)}45%,70%{transform:translateY(-100%)}100%{transform:translateY(var(--y,0))}}
-.tile.flash{animation:flash 1.2s 2}
+[data-tile].flash{animation:flash 1.2s 2}
+
+/* layout B: swipe deck. One big card at a time, the next two peek out behind. */
+.deck{display:flex;flex-direction:column;gap:12px;padding:6px 4px 4px}
+.deck-stack{display:grid;padding-bottom:16px}
+.deck-card{grid-area:1/1;position:relative;padding:8px 8px 0;border-radius:6px;background:var(--paper);transform-origin:50% 100%;transition:transform .2s ease-out}
+.deck-card[data-depth="1"]{transform:translateY(8px) scale(.96) rotate(1.5deg)}
+.deck-card[data-depth="2"]{transform:translateY(16px) scale(.92) rotate(-1.5deg)}
+.deck-card[data-depth="1"] > *,.deck-card[data-depth="2"] > *{visibility:hidden}
+.deck-top{z-index:3;touch-action:pan-y;transform:rotate(-.6deg)}
+.deck-top.dragging{transition:none}
+.deck-top.out-l{transform:translateX(-120%) rotate(-14deg)!important}
+.deck-top.out-r{transform:translateX(120%) rotate(14deg)!important}
+.deck-top::before{content:"";position:absolute;z-index:2;top:-9px;left:50%;width:64px;height:18px;margin-left:-32px;background:var(--kaya);opacity:.85;transform:rotate(-3deg)}
+.deck-card .ph{aspect-ratio:4/3}
+.deck-card .shutter{padding:0 18px}
+.deck-card .placard.sm{padding:8px 10px}
+.deck-card .placard.sm .en{font-size:22px}
+.deck-card .placard.sm .langs{font-size:15px;margin-top:3px}
+.deck-body{display:flex;flex-direction:column;gap:6px;padding:10px 4px 14px}
+.deck-name{font:800 20px/1.25 var(--ui);text-wrap:balance}
+.deck-line{font:400 19px/1.3 var(--hand);color:var(--ink)}
+.deck-bar{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px}
+.deck-n{text-align:center;font:600 14px/1.3 var(--ui);color:var(--ink-2)}
+.deck-bar .btn-soft{font-size:15px}
+
+/* layout C: kopitiam shelves. One wooden rail per status, scrolled sideways. */
+.shelf{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.shelf-h{display:flex;align-items:center;gap:8px;margin:0;font:700 16px/1.3 var(--ui)}
+.shelf-h .tag{display:inline-block;width:14px;height:14px;border-radius:4px}
+.shelf-h .n{font:600 14px/1 var(--ui);color:var(--ink-2)}
+.tag-closed{background:var(--chilli-aa)}.tag-soon{background:var(--kaya)}.tag-unknown{background:var(--slate-aa)}.tag-open{background:var(--pandan-aa)}.tag-chope{background:var(--peranakan)}
+.rail{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:16px;margin:0 -16px;padding:8px 16px 0;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.plank{height:12px;margin:0 -16px;background:var(--teh);border-bottom:5px solid #8C5428}
+.shelf-it{flex:none;width:136px;scroll-snap-align:start;position:relative;padding:5px 5px 0;border-radius:6px 6px 0 0;background:var(--paper)}
+.shelf-it .ph{aspect-ratio:1}
+.shelf-it .shutter{padding:0 2px}
+.shelf-it .tile-top{padding:6px 2px 8px}
+.shelf-it .tile-name{font-size:14px}
+.shelf-it.rattle,.deck-top.rattle{animation:jiggle .4s}
+@keyframes jiggle{30%{transform:rotate(-2deg)}60%{transform:rotate(2deg)}}
+
+/* layout D: stall row. Lit signboards over roller shutters: up when open, half down when closing soon, down when shut. */
+.stalls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px;padding:8px 0 10px}
+.stalls .stall:only-child{grid-column:1/-1}
+.stall{position:relative}
+.stall .tile-hit{display:flex;flex-direction:column}
+.awning{display:block;height:12px;border-radius:4px 4px 0 0;background:repeating-linear-gradient(90deg,var(--paper) 0 12px,var(--peranakan) 12px 24px)}
+.sign{display:flex;align-items:center;justify-content:center;min-height:52px;padding:6px 8px;background:var(--ink);text-align:center}
+.sign-tx{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:800 13px/1.2 var(--ui);text-transform:uppercase;letter-spacing:.03em;color:#A39E98;text-wrap:balance}
+.s-open .sign-tx,.s-soon .sign-tx{color:var(--kaya);text-shadow:0 0 8px rgba(246,195,67,.75)}
+.s-soon .sign-tx{animation:flicker 3.2s steps(1) infinite}
+@keyframes flicker{0%,100%{opacity:1}8%{opacity:.35}10%{opacity:1}13%{opacity:.5}15%{opacity:1}}
+.front{position:relative;display:block;overflow:hidden;aspect-ratio:4/3;background:var(--cream-3)}
+.front img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.s-closed .front img,.s-unknown .front img{filter:grayscale(1) brightness(.7)}
+.s-soon .front img{filter:saturate(.6)}
+.front::before{content:"";position:absolute;z-index:3;top:0;left:0;right:0;height:8px;background:#6E6A64}
+.roller{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding:0 6px 10px;background:repeating-linear-gradient(180deg,#CFCAC2 0 9px,#A9A39A 9px 11px);transform:translateY(var(--y,0))}
+.s-soon .roller{--y:-38%}
+.s-open .roller{--y:-100%}
+.roller .placard.sm{width:100%;transform:rotate(-3deg)}
+.roller .placard.sm .langs{flex-wrap:wrap;white-space:normal}
+.counter{display:flex;align-items:center;gap:6px;min-height:36px;padding:6px;background:var(--cream-3);border-radius:0 0 6px 6px}
+.counter .km{margin-left:auto;font:700 12px/1.3 var(--ui);color:var(--ink-2)}
+.counter .tc{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:var(--peranakan)}
+.counter .tc .i{width:16px;height:16px}
+.counter .back{font:700 13px/1.3 var(--ui)}
 @keyframes flash{50%{box-shadow:0 0 0 5px var(--kaya)}}
 
 /* taped note */
@@ -259,13 +327,21 @@ div.quiet,.quiet summary{display:flex;align-items:center;gap:8px;min-height:44px
   </div>
   <div id="awall" hidden>
     <div class="wallhead" id="wallhead"></div>
-    <div class="abody"><div id="wallchip"></div><div class="tiles" id="wall"></div></div>
+    <div class="abody"><div id="wallchip"></div><div id="wall"></div></div>
   </div>
 
   <footer class="demo" aria-label="Demo controls">
     <p>Prototype · data as of 20 Oct 2026 · tap 7 Dec to see a busy day</p>
     <div class="demo-row">
-      <div class="dates" role="group" aria-label="Pretend today is">
+      <div class="dates" id="layouts" role="group" aria-label="Layout">
+        <button data-l="wall" aria-pressed="true">Wall</button>
+        <button data-l="deck" aria-pressed="false">Deck</button>
+        <button data-l="shelves" aria-pressed="false">Shelves</button>
+        <button data-l="stalls" aria-pressed="false">Stalls</button>
+      </div>
+    </div>
+    <div class="demo-row">
+      <div class="dates" id="dates" role="group" aria-label="Pretend today is">
         <button data-d="2026-10-20" aria-pressed="true">20 Oct</button>
         <button data-d="2026-12-07" aria-pressed="false">7 Dec</button>
       </div>
@@ -383,6 +459,36 @@ const UI = (() => {
 </button></div>`;
   }
 
+  const label = (c, km, choped) => `${esc(short(c.name))}, ${WORD[kind(c)]}${km !== undefined ? ', ' + dist(km) : ''}${choped ? ', choped' : ''}`;
+  const stamp = c => kind(c) === 'open' ? '' : placardShort(placardParts(c));
+  const meta = (c, km, choped, lead = pill(kind(c))) => `${lead}${km !== undefined ? `<span class="km">${dist(km)}</span>` : ''}${choped ? `<span class="tc">${icon('tissueOn')}</span>` : ''}`;
+
+  // Only the top card carries data-tile, so animations and focus land on the card you can see.
+  function deckCard(c, { km, choped, depth }) {
+    const k = kind(c);
+    if (depth) return `<div class="deck-card s-${k}" data-depth="${depth}" aria-hidden="true"><span class="ph"></span><span class="deck-body"></span></div>`;
+    return `<div class="deck-card deck-top s-${k}" data-tile="${c.id}">
+<button class="tile-hit" data-id="${c.id}" aria-label="${label(c, km, choped)}">
+<span class="ph"><img src="photos/${c.id}.jpg" alt="" decoding="async" draggable="false"><span class="shutter">${stamp(c)}</span></span>
+<span class="deck-body"><span class="deck-name">${esc(short(c.name))}</span><span class="tile-st">${meta(c, km, choped)}</span><span class="deck-line">“${esc(c.line)}”</span></span>
+</button></div>`;
+  }
+
+  const shelfItem = (c, { km, choped } = {}) => `<div class="shelf-it s-${kind(c)}" data-tile="${c.id}" role="listitem">
+<button class="tile-hit" data-id="${c.id}" aria-label="${label(c, km, choped)}">
+<span class="ph"><img src="photos/${c.id}.jpg" alt="" loading="lazy" decoding="async"><span class="shutter">${stamp(c)}</span></span>
+<span class="tile-top"><span class="tile-name">${esc(short(c.name))}</span><span class="tile-st">${meta(c, km, choped)}</span></span>
+</button></div>`;
+
+  // A shut stall's shutter already says closed, so its counter says when it comes back instead.
+  const stallLead = c => kind(c) === 'closed' ? `<span class="back">${esc(placardParts(c).sub)}</span>` : kind(c) === 'unknown' ? '<span class="back">Call first</span>' : pill(kind(c));
+  const stall = (c, { km, choped } = {}) => `<div class="stall s-${kind(c)}" data-tile="${c.id}">
+<button class="tile-hit" data-id="${c.id}" aria-label="${label(c, km, choped)}">
+<span class="awning"></span><span class="sign"><span class="sign-tx">${esc(short(c.name))}</span></span>
+<span class="front"><img src="photos/${c.id}.jpg" alt="" loading="lazy" decoding="async"><span class="roller">${stamp(c)}</span></span>
+<span class="counter">${meta(c, km, choped, stallLead(c))}</span>
+</button></div>`;
+
   const quiet = c => {
     const r = c.remarks[0];
     const head = `${icon('info', 'i20')}<span class="qt">${stallsLine(c)}${r && r.length <= 34 ? ' · ' + esc(r) : ''}</span>`;
@@ -470,14 +576,16 @@ const UI = (() => {
   const spotFig = (state, extra = '') => `<figure class="spot-fig">${spot(state)}<figcaption>${SPOTS[state].caption}</figcaption>${extra}</figure>`;
   const note = (line, k) => `<div class="note"><p>${esc(line)}</p><div class="sig">${CAST[k].name} ${avatar(k)}</div></div>`;
 
-  return { icon, pill, placardParts, tile, note, quiet, goSign, hero, fmt, esc, short, kind, WORD, dist, FOOD, foodSVG, castFor, SPOTS, spot, spotFig };
+  return { icon, pill, placardParts, tile, deckCard, shelfItem, stall, note, quiet, goSign, hero, fmt, esc, short, kind, WORD, dist, FOOD, foodSVG, castFor, SPOTS, spot, spotFig };
 })();
 
 (() => {
 const { icon, esc, short, fmt, dist, kind } = UI;
 const $ = id => document.getElementById(id);
-const S = { date: '2026-10-20', here: null, near: false, geo: 'idle', chope: new Set(), aFilter: '', aStatus: null, aView: 'home', eatSeen: false, rot: 0 };
+const S = { date: '2026-10-20', here: null, near: false, geo: 'idle', chope: new Set(), aFilter: '', aStatus: null, aView: 'home', eatSeen: false, rot: 0, layout: 'wall', deckAt: null };
+const LAYOUTS = ['wall', 'deck', 'shelves', 'stalls'];
 try { const v = JSON.parse(localStorage.getItem('usc-chope') || '[]'); if (Array.isArray(v)) S.chope = new Set(v); } catch {}
+try { const h = /layout=(\w+)/.exec(location.hash), v = h ? h[1] : localStorage.getItem('usc-layout'); if (LAYOUTS.includes(v)) S.layout = v; } catch {}
 const saveChope = () => { try { localStorage.setItem('usc-chope', JSON.stringify([...S.chope])); } catch {} };
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const list = () => DATA[S.date];
@@ -518,7 +626,7 @@ function getPos() {
   });
 }
 async function findNear() {
-  if (S.here) { S.near = true; renderHead(); renderBody(); return; }
+  if (S.here) { S.near = true; S.deckAt = null; renderHead(); renderBody(); return; }
   S.geo = 'locating'; renderHead(); renderBody();
   try { setHere(await getPos()); }
   catch { S.geo = 'idle'; renderHead(); renderBody(); openPicker(); }
@@ -580,7 +688,7 @@ function headlineHTML() {
 function renderHead() {
   let top;
   if (S.geo === 'locating') top = `<button class="btn btn-primary" disabled><span class="kl"></span>Uncle finding you…</button>`;
-  else if (S.near && S.here) top = `<div class="nearon">${icon('pin', 'i20')}<span>Showing the 4 nearest to you</span><button class="btn btn-text" data-unnear>Reset</button></div>`;
+  else if (S.near && S.here) top = `<div class="nearon">${icon('pin', 'i20')}<span>Showing the ${cap(4, true)} nearest to you</span><button class="btn btn-text" data-unnear>Reset</button></div>`;
   else top = `<button class="btn btn-primary" data-near>${icon('pin', 'i20')}Find makan near me</button>`;
   $('ahead').innerHTML = `<header class="top"><!--@LOGO@--><span class="today">${fmt(S.date)}</span></header>` + `<p class="headline">${headlineHTML()}</p>` + top +
     `<div class="search${S.aFilter ? ' filled' : ''}" id="asearch">${icon('search', 'i20')}<input id="aq" type="search" placeholder="Search hawker centre" autocomplete="off" aria-label="Search hawker centre" value="${esc(S.aFilter)}"><button class="clr" id="aclr" aria-label="Clear search"><span>${icon('close')}</span></button>` +
@@ -589,40 +697,60 @@ function renderHead() {
   const syncSugg = () => { sg.hidden = !(document.activeElement === q && !q.value); };
   q.addEventListener('focus', syncSugg);
   q.addEventListener('blur', () => setTimeout(syncSugg, 150));
-  q.addEventListener('input', () => { S.aFilter = q.value; $('asearch').classList.toggle('filled', !!S.aFilter); syncSugg(); renderBody(); });
+  q.addEventListener('input', () => { S.aFilter = q.value; S.deckAt = null; $('asearch').classList.toggle('filled', !!S.aFilter); syncSugg(); renderBody(); });
   q.addEventListener('keydown', e => { if (e.key === 'Enter') { const r = matches(q.value); if (r[0]) { q.blur(); openInA(r[0]); } } if (e.key === 'Escape') q.blur(); });
-  $('aclr').onclick = () => { q.value = ''; S.aFilter = ''; $('asearch').classList.remove('filled'); renderBody(); q.focus(); };
+  $('aclr').onclick = () => { q.value = ''; S.aFilter = ''; S.deckAt = null; $('asearch').classList.remove('filled'); renderBody(); q.focus(); };
   renderFab();
 }
 function renderFab() {
   $('afab').innerHTML = `<button class="btn fab${S.eatSeen ? ' round' : ''}" data-eat aria-label="Eat where ah?">${icon('susan')}<span class="lbl">Eat where ah?</span></button>`;
 }
-const tileFor = (c, d) => UI.tile(c, { km: d, choped: S.chope.has(c.id) });
-const grid = (rows, near) => `<div class="tiles">${rows.map(c => tileFor(c, near ? km(S.here, c) : undefined)).join('')}</div>`;
+const opts = (c, near) => ({ km: near ? km(S.here, c) : undefined, choped: S.chope.has(c.id) });
+const SHELVES = [['closed', 'Shut today'], ['soon', 'Closing soon'], ['unknown', 'Not sure, call first'], ['open', 'Open today']];
+const shelf = (k, title, rows, near) => `<section class="shelf"><h3 class="shelf-h"><span class="tag tag-${k}"></span>${esc(title)}<span class="n">${rows.length}</span></h3><div class="rail" role="list" aria-label="${esc(title)}">${rows.map(c => UI.shelfItem(c, opts(c, near))).join('')}</div><div class="plank"></div></section>`;
+let deckRows = [];
+function deck(rows, near) {
+  deckRows = rows;
+  const i = Math.max(0, rows.findIndex(c => c.id === S.deckAt));
+  const cards = rows.slice(i, i + 3).map((c, j) => UI.deckCard(c, { ...opts(c, near), depth: j })).reverse().join('');
+  return `<div class="deck"><div class="deck-stack">${cards}</div>${rows.length > 1 ? `<div class="deck-bar"><button class="xbtn" data-dk="-1" aria-label="Previous centre">${icon('back', 'i20')}</button><span class="deck-n">${i + 1} of ${rows.length} · swipe or tap</span><button class="btn btn-soft" data-dk="1">Next ${icon('arrow', 'i20')}</button></div>` : ''}</div>`;
+}
+// One list of centres, drawn in whichever layout the demo bar picked. `chope` marks the small "Your chope" strip.
+function view(rows, near, chope) {
+  if (!rows.length) return '';
+  if (S.layout === 'stalls') return `<div class="stalls">${rows.map(c => UI.stall(c, opts(c, near))).join('')}</div>`;
+  if (S.layout === 'shelves' && !chope) return SHELVES.map(([k, t]) => { const r = rows.filter(c => kind(c) === k); return r.length ? shelf(k, t, r, near) : ''; }).join('');
+  if (chope && S.layout !== 'wall') return shelf('chope', 'Your chope', rows, near);
+  if (S.layout === 'deck') return deck(rows, near);
+  return `<div class="tiles">${rows.map(c => UI.tile(c, opts(c, near))).join('')}</div>`;
+}
+// The deck and shelves cost no extra height per centre, so they carry more before "See all".
+// Shelves split by status, so a cap would hide whole rails on a busy day; only "near me" is capped.
+const cap = (n, near) => S.layout === 'deck' || (S.layout === 'shelves' && near) ? 12 : S.layout === 'shelves' ? Infinity : n;
 const seeAll = label => `<button class="see-all" data-all>${label}${icon('arrow', 'i20')}</button>`;
 const stateCard = (state, sub) => `<div class="statecard">${UI.spot(state)}<div>${UI.SPOTS[state].caption}<p>${esc(sub)}</p></div></div>`;
 function renderHomeBody() {
   const b = $('abody'), L = list();
   if (S.aFilter) {
     const r = matches(S.aFilter);
-    b.innerHTML = r.length ? grid(r.slice(0, 6)) + (r.length > 6 ? seeAll(`See all ${r.length} matches`) : '')
+    b.innerHTML = r.length ? view(r.slice(0, cap(6))) + (r.length > cap(6) ? seeAll(`See all ${r.length} matches`) : '')
       : UI.spotFig('empty', `<p>Try a road or estate, like Bedok or Tiong Bahru.</p>`);
     return;
   }
   if (S.geo === 'locating') { b.innerHTML = UI.spotFig('loading'); return; }
   const ch = [...S.chope].map(byId).filter(Boolean);
   const near = S.near && S.here;
-  const chopeHTML = ch.length ? `<h2 class="sec">${icon('tissueOn', 'i20')}Your chope</h2>` + grid(ch.slice(0, 4), near) : '';
+  const chopeHTML = !ch.length ? '' : S.layout === 'wall' || S.layout === 'stalls' ? `<h2 class="sec">${icon('tissueOn', 'i20')}Your chope</h2>` + view(ch.slice(0, 4), near, true) : view(ch, near, true);
   if (near) {
-    const rows = nearest(4 + ch.length).map(x => x.c).filter(c => !S.chope.has(c.id)).slice(0, 4);
-    b.innerHTML = chopeHTML + (ch.length ? '<h2 class="sec">Nearest to you</h2>' : '') + grid(rows, true) + seeAll(`See all ${L.length} centres`);
+    const rows = nearest(cap(4, true) + ch.length).map(x => x.c).filter(c => !S.chope.has(c.id)).slice(0, cap(4, true));
+    b.innerHTML = chopeHTML + (ch.length && S.layout !== 'shelves' ? '<h2 class="sec">Nearest to you</h2>' : '') + view(rows, true) + seeAll(`See all ${L.length} centres`);
     return;
   }
   const shut = L.filter(c => ['closed', 'soon'].includes(kind(c)) && !S.chope.has(c.id)).sort((a, c) => RANK[a.status.kind] - RANK[c.status.kind] || a.name.localeCompare(c.name));
   const geo = S.geo === 'far' ? stateCard('far', "Showing today's closures for all of Singapore.") : '';
-  const head = ch.length && shut.length ? '<h2 class="sec">Shut or shutting soon</h2>' : '';
+  const head = ch.length && shut.length && S.layout !== 'shelves' ? '<h2 class="sec">Shut or shutting soon</h2>' : '';
   if (!shut.length) { b.innerHTML = chopeHTML + geo + UI.spotFig('good') + seeAll(`See all ${L.length} centres`); return; }
-  b.innerHTML = chopeHTML + geo + head + grid(shut.slice(0, geo || ch.length ? 4 : 6)) + seeAll(`See all ${L.length} centres`);
+  b.innerHTML = chopeHTML + geo + head + view(shut.slice(0, cap(geo || ch.length ? 4 : 6))) + seeAll(`See all ${L.length} centres`);
 }
 function renderWall() {
   let rows = S.aFilter ? matches(S.aFilter) : [...list()];
@@ -632,11 +760,11 @@ function renderWall() {
   else if (!S.aFilter) rows.sort((a, b) => (S.chope.has(b.id) - S.chope.has(a.id)) || RANK[a.status.kind] - RANK[b.status.kind] || a.name.localeCompare(b.name));
   $('wallhead').innerHTML = `<button class="xbtn" data-home aria-label="Back to today">${icon('back', 'i20')}</button><h2>${S.aStatus ? `${rows.length} ${WORDF[S.aStatus].toLowerCase()}` : S.aFilter ? `${rows.length} matches` : `All ${rows.length} centres`}</h2>`;
   $('wallchip').innerHTML = S.aStatus ? `<button class="showing" data-unfilter aria-label="Clear filter: ${WORDF[S.aStatus]}">Showing: ${WORDF[S.aStatus]}<span class="x">${icon('close')}</span></button>` : '';
-  $('wall').innerHTML = rows.map(c => tileFor(c, near ? km(S.here, c) : undefined)).join('') || UI.spotFig('good');
+  $('wall').innerHTML = view(rows, near) || UI.spotFig('good');
 }
 function renderBody() { if (S.aView === 'wall') renderWall(); else renderHomeBody(); fitPlacards(); }
 function setAView(v) {
-  S.aView = v; $('ahome').hidden = v !== 'home'; $('awall').hidden = v !== 'wall';
+  S.aView = v; S.deckAt = null; $('ahome').hidden = v !== 'home'; $('awall').hidden = v !== 'wall';
   if (v === 'home') { S.aStatus = null; renderHead(); }
   renderBody(); window.scrollTo(0, 0);
 }
@@ -650,8 +778,9 @@ function openInA(c) {
 function goA(c, from) {
   replay(from && tileOf(from.id), 'slam');
   setTimeout(() => {
-    let el = tileOf(c.id);
-    if (!el) { S.aFilter = ''; S.aStatus = null; setAView('wall'); el = tileOf(c.id); }
+    const bringUp = () => { if (S.layout === 'deck' && deckRows.some(x => x.id === c.id)) { S.deckAt = c.id; renderBody(); } return tileOf(c.id); };
+    let el = tileOf(c.id) || bringUp();
+    if (!el) { S.aFilter = ''; S.aStatus = null; setAView('wall'); el = bringUp(); }
     if (!el) return;
     el.scrollIntoView({ block: 'center', behavior: REDUCED ? 'auto' : 'smooth' });
     setTimeout(() => { replay(el, 'reveal'); replay(el, 'flash'); el.querySelector('.tile-hit').focus({ preventScroll: true }); }, REDUCED ? 0 : 500);
@@ -663,11 +792,53 @@ document.querySelector('.app').addEventListener('click', e => {
   const f = e.target.closest('[data-fk]'); if (f) { S.aStatus = f.dataset.fk; setAView('wall'); return; }
   if (e.target.closest('[data-all]')) { S.aStatus = null; setAView('wall'); return; }
   if (e.target.closest('[data-home]')) { S.aFilter = ''; setAView('home'); return; }
-  if (e.target.closest('[data-unfilter]')) { S.aStatus = null; renderBody(); return; }
-  if (e.target.closest('[data-unnear]')) { S.near = false; renderHead(); renderBody(); return; }
-  const t = e.target.closest('.tile-hit'); if (!t) return;
+  if (e.target.closest('[data-unfilter]')) { S.aStatus = null; S.deckAt = null; renderBody(); return; }
+  if (e.target.closest('[data-unnear]')) { S.near = false; S.deckAt = null; renderHead(); renderBody(); return; }
+  const dk = e.target.closest('[data-dk]'); if (dk) { deckGo(+dk.dataset.dk, `[data-dk="${dk.dataset.dk}"]`); return; }
+  const t = e.target.closest('.tile-hit'); if (!t || swiped) return;
   replay(t.parentNode, 'rattle');
   setTimeout(() => openSheet(byId(t.dataset.id)), REDUCED ? 0 : 250);
+});
+
+/* deck: buttons, arrow keys and a sideways swipe all move one card */
+function deckGo(step, refocus, dir = step > 0 ? 'l' : 'r') {
+  if (!deckRows.length) return;
+  const n = deckRows.length, i = Math.max(0, deckRows.findIndex(c => c.id === S.deckAt)), j = (i + step + n) % n;
+  S.deckAt = deckRows[j].id;
+  const done = () => {
+    renderBody();
+    if (refocus) document.querySelector(refocus)?.focus({ preventScroll: true });
+    if (step > 0 && j === 0) toast("That's the lot. Back to the first one.");
+  };
+  const top = document.querySelector('.deck-top');
+  if (REDUCED || !top) { done(); return; }
+  top.classList.add(dir === 'r' ? 'out-r' : 'out-l');
+  setTimeout(done, 200);
+}
+let drag = null, swiped = false;
+document.querySelector('.app').addEventListener('pointerdown', e => {
+  swiped = false;
+  const card = e.target.closest('.deck-top');
+  if (card && !e.button) drag = { card, x: e.clientX, y: e.clientY, dx: 0, id: e.pointerId, moved: false };
+});
+addEventListener('pointermove', e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  drag.dx = e.clientX - drag.x;
+  if (!drag.moved && Math.abs(drag.dx) > 8 && Math.abs(drag.dx) > Math.abs(e.clientY - drag.y)) { drag.moved = true; drag.card.classList.add('dragging'); }
+  if (drag.moved) drag.card.style.transform = `translateX(${drag.dx}px) rotate(${drag.dx / 18}deg)`;
+});
+const endDrag = e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  const d = drag; drag = null;
+  if (!d.moved) return;
+  swiped = true; d.card.classList.remove('dragging'); d.card.style.transform = '';
+  if (Math.abs(d.dx) > 80 && e.type === 'pointerup') deckGo(1, null, d.dx < 0 ? 'l' : 'r');
+};
+addEventListener('pointerup', endDrag);
+addEventListener('pointercancel', endDrag);
+document.querySelector('.app').addEventListener('keydown', e => {
+  if (!e.target.closest('.deck') || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  e.preventDefault(); deckGo(e.key === 'ArrowRight' ? 1 : -1, '.deck-top .tile-hit');
 });
 
 /* sheet */
@@ -759,10 +930,19 @@ document.addEventListener('click', e => { if (e.target.closest('[data-eat]')) ea
 /* demo bar */
 function setDate(d) {
   S.date = d; S.aStatus = null; sheet.hidden = true;
-  document.querySelectorAll('.dates button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === d));
+  document.querySelectorAll('#dates button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === d));
   if (S.aView === 'wall') renderHead(); setAView(S.aView);
 }
-document.querySelector('.dates').addEventListener('click', e => { const b = e.target.closest('button'); b && setDate(b.dataset.d); });
+$('dates').addEventListener('click', e => { const b = e.target.closest('button'); b && setDate(b.dataset.d); });
+function setLayout(l) {
+  S.layout = l; S.deckAt = null;
+  try { localStorage.setItem('usc-layout', l); } catch {}
+  document.querySelectorAll('#layouts button').forEach(b => b.setAttribute('aria-pressed', b.dataset.l === l));
+  if (S.aView === 'home') renderHead();
+  renderBody();
+}
+$('layouts').addEventListener('click', e => { const b = e.target.closest('button'); b && setLayout(b.dataset.l); });
+document.querySelectorAll('#layouts button').forEach(b => b.setAttribute('aria-pressed', b.dataset.l === S.layout));
 $('reset').addEventListener('click', () => {
   S.chope.clear(); try { localStorage.removeItem('usc-chope'); } catch {}
   S.here = null; S.near = false; S.geo = 'idle'; S.aFilter = '';

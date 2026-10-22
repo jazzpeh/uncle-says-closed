@@ -19,6 +19,8 @@ open design/prototype/out/preview.html
 
 `out/` is gitignored. Photos stay out of git because the licence for the images themselves is unverified; the closures CSV only links to them.
 
+If `nea.gov.sg` is blocked (it is in Claude's cloud sessions), read the photos back from the published prototype instead: they sit at `photos/<id>.jpg` on it.
+
 To republish the artifact, publish `out/uncle-says-closed.html` with `out/photos/*.jpg` as supporting files at `photos/<id>.jpg`.
 
 ## Where things are
@@ -35,11 +37,16 @@ To republish the artifact, publish `out/uncle-says-closed.html` with `out/photos
 - Placards carry all four official languages, English largest. The strings live in `PLACARD_TEXT` and need a native speaker before launch.
 - The cast rotates per centre: a Chinese uncle, a Malay makcik, an Indian uncle and a younger auntie. No government logos, and nothing implies halal status.
 - Home answers without scrolling: uncle headline with tappable counts, "Find makan near me", search, at most six tiles, "See all". "Eat where ah?" is the floating button.
+- Layouts share one data path: `view(rows, near)` in `page.html` draws any list of centres as the wall, deck, shelves or stalls, so search, near me, chope, "See all" and "Go here" behave the same in all four.
+  - Wall: taped polaroids, at most six on home.
+  - Deck: one big card with the uncle's line, swipe, arrow keys or Next to move; up to 12 on home.
+  - Shelves: one sideways rail per status on a teh plank; every shut and closing centre on home, 12 for near me.
+  - Stalls: lit signboard over a roller shutter: down when shut (counter says when it is back), part down and flickering when closing soon, up when open.
 - Tiles are each centre's real NEA photo as a taped polaroid. Closed goes black and white with the placard stamped across; closing soon is faded with a kaya stamp; open is full colour.
 
 ## Open items
 
-- Owner: more distinctive layouts were requested after the polaroid wall. Next sketches are a swipe deck, kopitiam shelves (horizontal rails by status), and a stall row with lit signboards over roller shutters, behind a layout switch in the demo bar.
+- Owner: pick a home layout. The prototype now has four behind the Layout switch in the demo bar (Wall, Deck, Shelves, Stalls); `#layout=deck` etc. opens one directly.
 - Owner: approve the design and the logo.
 - Native speaker check of the Malay, Chinese and Tamil placard strings.
 - Confirm the photo licence, or hotlink `nea.gov.sg` (it sends `cross-origin-resource-policy: cross-origin`) with an NEA credit.
