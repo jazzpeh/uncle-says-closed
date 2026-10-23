@@ -37,7 +37,8 @@ To republish the artifact, publish `out/uncle-says-closed.html` with `out/photos
 - Placards carry all four official languages, English largest. The strings live in `PLACARD_TEXT` and need a native speaker before launch.
 - The cast rotates per centre: a Chinese uncle, a Malay makcik, an Indian uncle and a younger auntie. No government logos, and nothing implies halal status.
 - Home answers without scrolling: uncle headline with tappable counts, "Find makan near me", search, at most six tiles, "See all". "Eat where ah?" is the floating button.
-- Layouts share one data path: `view(rows, near)` in `page.html` draws any list of centres as the wall, deck, shelves or stalls, so search, near me, chope, "See all" and "Go here" behave the same in all four.
+- Layouts share one data path: `view(rows, near)` in `page.html` draws any list of centres as the board, wall, deck, shelves or stalls, so search, near me, chope, "See all" and "Go here" behave the same in all five.
+  - Board (default): your first chope answered in one big verdict with its "Go here instead", then one dark row per centre with a status dot, the reason and the date that matters ("Back 9 Dec", "Shuts 26 Oct"). Eight rows on home, no photos.
   - Wall: taped polaroids, at most six on home.
   - Deck: one big card with the uncle's line, swipe, arrow keys or Next to move; up to 12 on home.
   - Shelves: one sideways rail per status on a teh plank; every shut and closing centre on home, 12 for near me.
@@ -46,7 +47,7 @@ To republish the artifact, publish `out/uncle-says-closed.html` with `out/photos
 
 ## Open items
 
-- Owner: pick a home layout. The prototype now has four behind the Layout switch in the demo bar (Wall, Deck, Shelves, Stalls); `#layout=deck` etc. opens one directly.
+- Owner: pick a home layout. Board is the recommendation and the default; Wall, Deck, Shelves and Stalls stay behind the Layout switch in the demo bar, and `#layout=wall` etc. opens one directly. If Board wins, the photo licence stops blocking launch, since photos then only appear on the detail sheet.
 - Owner: approve the design and the logo.
 - Native speaker check of the Malay, Chinese and Tamil placard strings.
 - Confirm the photo licence, or hotlink `nea.gov.sg` (it sends `cross-origin-resource-policy: cross-origin`) with an NEA credit.

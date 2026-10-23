@@ -180,6 +180,29 @@ a{color:var(--pandan-press)}
 .shelf-it.rattle,.deck-top.rattle{animation:jiggle .4s}
 @keyframes jiggle{30%{transform:rotate(-2deg)}60%{transform:rotate(2deg)}}
 
+/* layout E: board. Your chope answered first in one big verdict, then one dense row per centre with the date that matters. */
+.verdict{margin-top:8px;border-radius:18px;padding:16px;background:var(--chilli-aa);color:var(--paper)}
+.v-open{background:var(--pandan-aa)}.v-soon{background:var(--kaya);color:var(--ink)}.v-unknown{background:var(--slate-aa)}
+.verdict .tile-hit{display:flex;flex-direction:column;gap:4px;color:inherit}
+.vl{display:flex;align-items:center;gap:6px;font:700 12px/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.vbig{margin-top:6px;font:400 32px/1.05 var(--display)}
+.vnm{font:800 18px/1.25 var(--ui);text-wrap:balance}
+.vsub{font:600 14px/1.3 var(--ui)}
+.vline{margin-top:6px;font:400 19px/1.3 var(--hand)}
+.verdict .go-sign{margin-top:12px}
+.bhint{margin:8px 0 0;font:600 14px/1.4 var(--ui);color:var(--ink-2)}
+.board{list-style:none;margin:8px 0 0;padding:4px 0;border-radius:14px;background:var(--ink);color:#F3E9D2}
+.brow+.brow{border-top:1px solid #2E2A24}
+.brow .tile-hit{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:56px;padding:9px 14px;color:inherit}
+.bdot{width:10px;height:10px;border-radius:50%;background:#3BC98A}
+.s-closed .bdot{background:#FF5A4C}.s-soon .bdot{background:var(--kaya)}.s-unknown .bdot{background:#9AA0A8}
+.bn{display:flex;align-items:center;gap:6px;font:700 15px/1.25 var(--ui)}
+.bn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bn svg{flex:none}
+.bsub{display:block;margin-top:2px;font:500 12px/1.3 var(--ui);color:#A39E98}
+.bwhen{font:700 14px/1.2 var(--ui);font-variant-numeric:tabular-nums;white-space:nowrap;color:#6EE0A8}
+.s-closed .bwhen{color:#FF8A7F}.s-soon .bwhen{color:var(--kaya)}.s-unknown .bwhen{color:#C3C7CD}
+
 /* layout D: stall row. Lit signboards over roller shutters: up when open, half down when closing soon, down when shut. */
 .stalls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px;padding:8px 0 10px}
 .stalls .stall:only-child{grid-column:1/-1}
@@ -334,7 +357,8 @@ div.quiet,.quiet summary{display:flex;align-items:center;gap:8px;min-height:44px
     <p>Prototype · data as of 20 Oct 2026 · tap 7 Dec to see a busy day</p>
     <div class="demo-row">
       <div class="dates" id="layouts" role="group" aria-label="Layout">
-        <button data-l="wall" aria-pressed="true">Wall</button>
+        <button data-l="board" aria-pressed="true">Board</button>
+        <button data-l="wall" aria-pressed="false">Wall</button>
         <button data-l="deck" aria-pressed="false">Deck</button>
         <button data-l="shelves" aria-pressed="false">Shelves</button>
         <button data-l="stalls" aria-pressed="false">Stalls</button>
@@ -489,6 +513,18 @@ const UI = (() => {
 <span class="counter">${meta(c, km, choped, stallLead(c))}</span>
 </button></div>`;
 
+  const day = ymd => fmt(ymd).replace(/^\w+ /, '');
+  const when = c => { const s = c.status; return { closed: () => `Back ${day(s.reopensOn)}`, soon: () => `Shuts ${day(s.closure.start)}`, unknown: () => 'Call first', open: () => 'Open' }[kind(c)](); };
+  const why = c => { const cl = c.status.closure; return cl ? (cl.kind === 'works' ? 'Renovation' : 'Cleaning') : stallsLine(c); };
+  const boardRow = (c, { km, choped } = {}) => `<li class="brow s-${kind(c)}" data-tile="${c.id}">
+<button class="tile-hit" data-id="${c.id}" aria-label="${label(c, km, choped)}, ${esc(when(c))}">
+<span class="bdot"></span><span><span class="bn"><span>${esc(short(c.name))}</span>${choped ? icon('tissueOn') : ''}</span><span class="bsub">${esc(why(c))}${km !== undefined ? ' · ' + dist(km) : ''}</span></span><span class="bwhen">${esc(when(c))}</span>
+</button></li>`;
+  const BIG = { closed: 'Closed lah', soon: 'Shutting soon', unknown: 'Not sure leh', open: 'Open!' };
+  const verdict = (c, { km } = {}) => `<div class="verdict v-${kind(c)}" data-tile="${c.id}">
+<button class="tile-hit" data-id="${c.id}" aria-label="Your chope, ${label(c, km)}"><span class="vl">${icon('tissueOn', 'i20')}Your chope</span><span class="vbig">${BIG[kind(c)]}</span><span class="vnm">${esc(short(c.name))}</span><span class="vsub">${esc(placardParts(c).sub)}${km !== undefined ? ' · ' + dist(km) : ''}</span><span class="vline">“${esc(c.line)}”</span></button>
+${c.alt && kind(c) !== 'open' ? goSign({ label: kind(c) === 'soon' ? 'Or go here' : 'Go here instead', name: short(c.alt.name), meta: `Open today · ${c.alt.km} km away`, attr: `data-go="${c.alt.id}" data-from="${c.id}"` }) : ''}</div>`;
+
   const quiet = c => {
     const r = c.remarks[0];
     const head = `${icon('info', 'i20')}<span class="qt">${stallsLine(c)}${r && r.length <= 34 ? ' · ' + esc(r) : ''}</span>`;
@@ -576,14 +612,14 @@ const UI = (() => {
   const spotFig = (state, extra = '') => `<figure class="spot-fig">${spot(state)}<figcaption>${SPOTS[state].caption}</figcaption>${extra}</figure>`;
   const note = (line, k) => `<div class="note"><p>${esc(line)}</p><div class="sig">${CAST[k].name} ${avatar(k)}</div></div>`;
 
-  return { icon, pill, placardParts, tile, deckCard, shelfItem, stall, note, quiet, goSign, hero, fmt, esc, short, kind, WORD, dist, FOOD, foodSVG, castFor, SPOTS, spot, spotFig };
+  return { icon, pill, placardParts, tile, deckCard, shelfItem, stall, boardRow, verdict, note, quiet, goSign, hero, fmt, esc, short, kind, WORD, dist, FOOD, foodSVG, castFor, SPOTS, spot, spotFig };
 })();
 
 (() => {
 const { icon, esc, short, fmt, dist, kind } = UI;
 const $ = id => document.getElementById(id);
-const S = { date: '2026-10-20', here: null, near: false, geo: 'idle', chope: new Set(), aFilter: '', aStatus: null, aView: 'home', eatSeen: false, rot: 0, layout: 'wall', deckAt: null };
-const LAYOUTS = ['wall', 'deck', 'shelves', 'stalls'];
+const S = { date: '2026-10-20', here: null, near: false, geo: 'idle', chope: new Set(), aFilter: '', aStatus: null, aView: 'home', eatSeen: false, rot: 0, layout: 'board', deckAt: null };
+const LAYOUTS = ['board', 'wall', 'deck', 'shelves', 'stalls'];
 try { const v = JSON.parse(localStorage.getItem('usc-chope') || '[]'); if (Array.isArray(v)) S.chope = new Set(v); } catch {}
 try { const h = /layout=(\w+)/.exec(location.hash), v = h ? h[1] : localStorage.getItem('usc-layout'); if (LAYOUTS.includes(v)) S.layout = v; } catch {}
 const saveChope = () => { try { localStorage.setItem('usc-chope', JSON.stringify([...S.chope])); } catch {} };
@@ -718,6 +754,8 @@ function deck(rows, near) {
 // One list of centres, drawn in whichever layout the demo bar picked. `chope` marks the small "Your chope" strip.
 function view(rows, near, chope) {
   if (!rows.length) return '';
+  const board = r => r.length ? `<ol class="board">${r.map(c => UI.boardRow(c, opts(c, near))).join('')}</ol>` : '';
+  if (S.layout === 'board') return chope ? UI.verdict(rows[0], opts(rows[0], near)) + board(rows.slice(1)) : board(rows);
   if (S.layout === 'stalls') return `<div class="stalls">${rows.map(c => UI.stall(c, opts(c, near))).join('')}</div>`;
   if (S.layout === 'shelves' && !chope) return SHELVES.map(([k, t]) => { const r = rows.filter(c => kind(c) === k); return r.length ? shelf(k, t, r, near) : ''; }).join('');
   if (chope && S.layout !== 'wall') return shelf('chope', 'Your chope', rows, near);
@@ -726,7 +764,7 @@ function view(rows, near, chope) {
 }
 // The deck and shelves cost no extra height per centre, so they carry more before "See all".
 // Shelves split by status, so a cap would hide whole rails on a busy day; only "near me" is capped.
-const cap = (n, near) => S.layout === 'deck' || (S.layout === 'shelves' && near) ? 12 : S.layout === 'shelves' ? Infinity : n;
+const cap = (n, near) => S.layout === 'board' ? 8 : S.layout === 'deck' || (S.layout === 'shelves' && near) ? 12 : S.layout === 'shelves' ? Infinity : n;
 const seeAll = label => `<button class="see-all" data-all>${label}${icon('arrow', 'i20')}</button>`;
 const stateCard = (state, sub) => `<div class="statecard">${UI.spot(state)}<div>${UI.SPOTS[state].caption}<p>${esc(sub)}</p></div></div>`;
 function renderHomeBody() {
@@ -740,7 +778,7 @@ function renderHomeBody() {
   if (S.geo === 'locating') { b.innerHTML = UI.spotFig('loading'); return; }
   const ch = [...S.chope].map(byId).filter(Boolean);
   const near = S.near && S.here;
-  const chopeHTML = !ch.length ? '' : S.layout === 'wall' || S.layout === 'stalls' ? `<h2 class="sec">${icon('tissueOn', 'i20')}Your chope</h2>` + view(ch.slice(0, 4), near, true) : view(ch, near, true);
+  const chopeHTML = !ch.length ? (S.layout === 'board' ? `<p class="bhint">Chope your usual centre and Uncle answers it first.</p>` : '') : S.layout === 'wall' || S.layout === 'stalls' ? `<h2 class="sec">${icon('tissueOn', 'i20')}Your chope</h2>` + view(ch.slice(0, 4), near, true) : view(ch, near, true);
   if (near) {
     const rows = nearest(cap(4, true) + ch.length).map(x => x.c).filter(c => !S.chope.has(c.id)).slice(0, cap(4, true));
     b.innerHTML = chopeHTML + (ch.length && S.layout !== 'shelves' ? '<h2 class="sec">Nearest to you</h2>' : '') + view(rows, true) + seeAll(`See all ${L.length} centres`);
@@ -788,6 +826,7 @@ function goA(c, from) {
 }
 document.querySelector('.app').addEventListener('click', e => {
   const o = e.target.closest('[data-open]'); if (o) { openInA(byId(o.dataset.open)); return; }
+  const g = e.target.closest('[data-go]'); if (g) { goA(byId(g.dataset.go), byId(g.dataset.from)); return; }
   if (e.target.closest('[data-near]')) { findNear(); return; }
   const f = e.target.closest('[data-fk]'); if (f) { S.aStatus = f.dataset.fk; setAView('wall'); return; }
   if (e.target.closest('[data-all]')) { S.aStatus = null; setAView('wall'); return; }
