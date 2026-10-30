@@ -3,8 +3,10 @@ name: Snapshot and deploy
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 21 * * *'
+  # Daily refresh paused until Pages is enabled and the design is signed off.
+  # Restore to refresh at 05:00 Singapore time:
+  # schedule:
+  #   - cron: '0 21 * * *'
   workflow_dispatch:
 
 permissions:
